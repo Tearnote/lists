@@ -23,3 +23,29 @@ Many of these allow taking notes of any kind, not just lists of tasks. They comm
    - How do I mark an item as completed?
    - Can I create multiple lists?
    - Are my lists being backed up somewhere?
+
+## Scope
+
+The goal is to make a CLI application that will make lists editing quick and friendly. This means it should take as little input as possible for the user to do what they're looking for, and they should receive constant feedback on the state of their lists.
+
+These goals are necessary for an MVP of the app:
+
+   - An overview of saved lists at startup,
+   - Badge next to each list showing how much of the list is already completed,
+   - Text input with a short command for each possible task,
+   - General help, as well as per-command help and usage hints,
+   - Input validation to ensure a command is valid,
+   - Example of correct syntax shown if the user seems confused,
+   - A side panel listing available commands,
+   - Status line above the prompt giving feedback on the result of the last command,
+   - Support for multiple storage backends - both local and remote,
+   - Automatic saving and loading of lists to storage.
+
+These additional goals are not necessary but would improve user experience if added:
+
+   - Multiple remote backends, such as Dropbox, database, SFTP etc.,
+   - Locally stored settings to customize behavior:
+       - Save on any change or on exit?
+       - Show completed tasks?
+       - Credential input for remote storage methods,
+   - Storage status screen, to show which storage backends are up-to-date and which are failing to update.
