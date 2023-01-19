@@ -48,4 +48,17 @@ These additional goals are not necessary but would improve user experience if ad
        - Save on any change or on exit?
        - Show completed tasks?
        - Credential input for remote storage methods,
+       - Disable command reference panel,
    - Storage status screen, to show which storage backends are up-to-date and which are failing to update.
+
+## Structure
+
+As an interactive CLI application, UX will necessarily be driven by a state machine. Each state will display only the relevant information, allowing the user to focus on their task.
+
+The start-up state will display an at-a-glance view of all the user's lists. This will allow them to immediately see what category of items has tasks to do, or to locate the list they want to modify.
+
+The list state will detail all the items in a single list. From there, the user can add items, remove them, modify them, mark them as completed, or emphasize them as important.
+
+At all times, the user is able to input commands at the bottom of the screen, following a prompt symbol. Above the prompt is a status line, confirming the success of the previous command or informing them of an error with their previous command.
+
+For reference, a list of all available commands will be displayed on the right side of the screen, making the user aware of their choices.
