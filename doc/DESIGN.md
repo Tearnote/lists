@@ -62,3 +62,8 @@ The list state will detail all the items in a single list. From there, the user 
 At all times, the user is able to input commands at the bottom of the screen, following a prompt symbol. Above the prompt is a status line, confirming the success of the previous command or informing them of an error with their previous command.
 
 For reference, a list of all available commands will be displayed on the right side of the screen, making the user aware of their choices.
+
+## Wireframes
+
+![Wireframe mock-up of the app in list view](wireframes/lists.png)
+![Wireframe mock-up of the app in task view](wireframes/tasks.png)
