@@ -67,3 +67,11 @@ For reference, a list of all available commands will be displayed on the right s
 
 ![Wireframe mock-up of the app in list view](wireframes/lists.png)
 ![Wireframe mock-up of the app in task view](wireframes/tasks.png)
+
+## Design language
+
+As a CLI application, there isn't much that can be done about the visuals, but the UX can still be made clearer with some smart choices. To edit any element of a list, the user has to input a number as position in the list. For this purpose, an item index will always be referred to using the "#" character, both at the actual item site and the help text, as in the [wireframes](#wireframes) above. The string "..." refers to an additional argument, usually the name of the item.
+
+Color will be used sparingly to direct attention towards important text, such as errors and manually emphasized entries.
+
+Line/box drawing characters will also be used sparingly. For the most part the layout should be obvious without them as the number of elements on the screen is fairly minimal.
