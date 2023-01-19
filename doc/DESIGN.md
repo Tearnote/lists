@@ -14,3 +14,12 @@ The majority of people settle on the note-taking apps in their phones, but some 
    - [ColorNote](https://play.google.com/store/apps/details?id=com.socialnmobile.dictapps.notepad.color.note), an Android app for taking colorful notes on the go.
 
 Many of these allow taking notes of any kind, not just lists of tasks. They commonly save the lists to online storage, allowing multiple people to access the lists, or to access them from multiple devices. Aside from that, they are often intentionally low on bells and whistles - the developers realize that with note-taking, ease and speed of use are king.
+
+## User stories
+
+> *As a busy adult, I want to write down my tasks so that I don't forget to do anything.*
+
+   - How do I add an item?
+   - How do I mark an item as completed?
+   - Can I create multiple lists?
+   - Are my lists being backed up somewhere?
