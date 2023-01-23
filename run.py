@@ -125,8 +125,9 @@ class TUI:
     """
 
     class State(Enum):
-        NONE = 0
-        LIST_VIEW = auto()
+        NONE = 0  # Initial state
+        LIST_VIEW = auto()  # Displaying list overview
+        SHUTDOWN = auto()  # Shutdown requested
 
     CONSOLE_SIZE = (80, 25)  # (w,h) column/row count
 
@@ -158,11 +159,11 @@ class TUI:
         test_list.tasks[4].done = True
 
         # Main loop
-        while True:
+        while cls.state != cls.State.SHUTDOWN:
             cls._render()
             command = input("> ")
             if command == "exit":
-                break
+                cls.state = cls.State.SHUTDOWN
 
     @classmethod
     def _render(cls):
