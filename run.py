@@ -4,6 +4,15 @@ from functools import reduce
 from colorama import just_fix_windows_console, Fore
 
 
+def put(text):
+    """Print a string without any appended newline
+
+    :param text: The string to print
+    :type text: str
+    """
+    print(text, end="")
+
+
 class Config:
     """Facility for accessing global app configuration
     """
@@ -164,17 +173,17 @@ class TUI:
             badge = "done!"
             if done_count < task_count:
                 badge = str(done_count) + "/" + str(task_count)
-            print(idx + " " + name + " (" + badge + ")\n")
+            put(idx + " " + name + " (" + badge + ")\n")
 
         # Print newlines until we're near the bottom
         for _ in range(cls.CONSOLE_SIZE[1] - len(cls.lists) - 2):
-            print("\n")
+            put("\n")
 
         # Print the result message
-        print("Welcome to Lists.\n")
+        put("Welcome to Lists.\n")
 
         # Add the prompt
-        print("> ")
+        put("> ")
 
 
 TUI.run()
