@@ -1,3 +1,6 @@
+from functools import reduce
+from itertools import count
+
 from colorama import just_fix_windows_console, Fore, Style
 
 
@@ -61,14 +64,28 @@ class Task:
             return Fore.LIGHTBLACK_EX + self.body
 
 
+class List:
+    """An ordered, printable list of tasks"""
+
+    def __init__(self):
+        """Constructor method
+        """
+        self.tasks = []
+
+    def __str__(self):
+        return reduce(
+            lambda acc, n_task:
+            acc + "#" + str(n_task[0]) + " " + str(n_task[1]) + "\n",
+            zip(count(), self.tasks),
+            "")
+
+    def add(self, task):
+        self.tasks.append(task)
+
+
 just_fix_windows_console()
 
 task = Task("Hello World!")
-print(task)
-task.done = True
-Config.set("print_done_tasks", "yes")
-print(task)
-Config.set("print_done_tasks", "hidden")
-print(task)
-Config.set("print_done_tasks", "no")
-print(task)
+todo = List()
+todo.add(task)
+print(todo)
