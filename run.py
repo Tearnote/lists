@@ -16,8 +16,8 @@ class Config:
         "print_done_tasks": "hidden"
     }
 
-    @staticmethod
-    def get(field):
+    @classmethod
+    def get(cls, field):
         """Retrieve a config value
 
         :param field: Value name
@@ -25,11 +25,11 @@ class Config:
         :return: The value of the config field
         :rtype: depends on the field
         """
-        return Config._fields[field]
+        return cls._fields[field]
 
-    @staticmethod
-    def set(field, value):
-        Config._fields[field] = value
+    @classmethod
+    def set(cls, field, value):
+        cls._fields[field] = value
 
 
 class Task:
@@ -108,13 +108,13 @@ class TUI:
 
     lists = []  # All to-do lists owned by the user
 
-    @staticmethod
-    def run():
+    @classmethod
+    def run(cls):
         just_fix_windows_console()
 
         # Set up test content
         Config.set("print_done_tasks", "yes")
-        TUI.lists.append(List())
+        cls.lists.append(List())
         test_list = TUI.lists[0]
         test_list.tasks.append(Task("Hello world!"))
         test_list.tasks.append(Task("How are you?"))
