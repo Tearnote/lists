@@ -114,6 +114,8 @@ class TUI:
 
     @classmethod
     def run(cls):
+        """Initialize the terminal interface and run the main loop
+        """
         # Initialize
         just_fix_windows_console()
         cls.state = cls.State.LIST_VIEW
@@ -126,10 +128,12 @@ class TUI:
         test_list.tasks.append(Task("How are you?"))
         test_list.tasks[1].done = True
 
-        cls.render()
+        cls._render()
 
     @classmethod
-    def render(cls):
+    def _render(cls):
+        """Redraw the screen contents
+        """
         for lst in cls.lists:
             print(lst)
 
