@@ -69,15 +69,18 @@ class List:
     Keep in mind that the tasks are printed starting from 1. When accessing
     tasks based on user input, you will need to subtract one.
 
+    :param name: Name of the list
+    :type name: str
     :param tasks: List of :class:`Task`s in the list. Can be freely manipulated
     :type tasks: list, optional
     """
 
-    def __init__(self, tasks=None):
+    def __init__(self, name, tasks=None):
         """Constructor method
         """
         if tasks is None:
             tasks = []
+        self.name = name
         self.tasks = tasks
 
     def __str__(self):
@@ -122,7 +125,7 @@ class TUI:
 
         # Set up test content
         Config.set("print_done_tasks", "yes")
-        cls.lists.append(List())
+        cls.lists.append(List("Main"))
         test_list = TUI.lists[0]
         test_list.tasks.append(Task("Hello world!"))
         test_list.tasks.append(Task("How are you?"))
