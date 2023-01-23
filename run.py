@@ -141,9 +141,11 @@ class TUI:
         test_list.tasks.append(Task("I'm fine, thanks"))
         test_list.tasks.append(Task("The weather is horrible"))
         test_list.tasks.append(Task("It's freezing and wet"))
+        test_list.tasks[0].done = True
         test_list.tasks[1].done = True
         test_list.tasks[2].done = True
-        print(cls.lists[0].count_done())
+        test_list.tasks[3].done = True
+        test_list.tasks[4].done = True
 
         cls._render()
 
@@ -155,7 +157,11 @@ class TUI:
             lst = cls.lists[i]
             idx = "#" + str(i)
             name = lst.name
-            badge = str(lst.count_done()) + "/" + str(len(lst.tasks))
+            done_count = lst.count_done()
+            task_count = len(lst.tasks)
+            badge = "done!"
+            if done_count < task_count:
+                badge = str(done_count) + "/" + str(task_count)
             print(idx + " " + name + " (" + badge + ")")
 
 
