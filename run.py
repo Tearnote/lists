@@ -202,6 +202,8 @@ class TUI:
 
         if cmd == "exit":
             cls.state = cls.State.SHUTDOWN
+        elif cmd == "":
+            cls.last_result = "Type \"help\" for assistance."
         else:
             cls.last_result = Fore.RED + "Unknown command." + Style.RESET_ALL
 
