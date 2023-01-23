@@ -153,6 +153,8 @@ class TUI:
     def _render(cls):
         """Redraw the screen contents
         """
+
+        # Print the lists
         for i in range(len(cls.lists)):
             lst = cls.lists[i]
             idx = "#" + str(i)
@@ -162,7 +164,17 @@ class TUI:
             badge = "done!"
             if done_count < task_count:
                 badge = str(done_count) + "/" + str(task_count)
-            print(idx + " " + name + " (" + badge + ")")
+            print(idx + " " + name + " (" + badge + ")\n")
+
+        # Print newlines until we're near the bottom
+        for _ in range(cls.CONSOLE_SIZE[1] - len(cls.lists) - 2):
+            print("\n")
+
+        # Print the result message
+        print("Welcome to Lists.\n")
+
+        # Add the prompt
+        print("> ")
 
 
 TUI.run()
