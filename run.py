@@ -100,15 +100,21 @@ class List:
         return result
 
 
-def run_tui():
-    just_fix_windows_console()
+class TUI:
+    """Runs the interactive terminal-based interface for the app
+    """
+    CONSOLE_SIZE = (80, 25)
 
-    Config.set("print_done_tasks", "yes")
-    todo = List()
-    todo.tasks.append(Task("Hello world!"))
-    todo.tasks.append(Task("How are you?"))
-    todo.tasks[1].done = True
-    print(todo)
+    @staticmethod
+    def run():
+        just_fix_windows_console()
+
+        Config.set("print_done_tasks", "yes")
+        todo = List()
+        todo.tasks.append(Task("Hello world!"))
+        todo.tasks.append(Task("How are you?"))
+        todo.tasks[1].done = True
+        print(todo)
 
 
-run_tui()
+TUI.run()
