@@ -103,18 +103,23 @@ class List:
 class TUI:
     """Runs the interactive terminal-based interface for the app
     """
-    CONSOLE_SIZE = (80, 25)
+
+    CONSOLE_SIZE = (80, 25)  # (w,h) column/row count
+
+    lists = []  # All to-do lists owned by the user
 
     @staticmethod
     def run():
         just_fix_windows_console()
 
+        # Set up test content
         Config.set("print_done_tasks", "yes")
-        todo = List()
-        todo.tasks.append(Task("Hello world!"))
-        todo.tasks.append(Task("How are you?"))
-        todo.tasks[1].done = True
-        print(todo)
+        TUI.lists.append(List())
+        test_list = TUI.lists[0]
+        test_list.tasks.append(Task("Hello world!"))
+        test_list.tasks.append(Task("How are you?"))
+        test_list.tasks[1].done = True
+        print(test_list)
 
 
 TUI.run()
