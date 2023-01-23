@@ -1,4 +1,5 @@
 from enum import Enum, auto
+from functools import reduce
 
 from colorama import just_fix_windows_console, Fore
 
@@ -101,6 +102,14 @@ class List:
 
         return result
 
+    def count_done(self):
+        """Count how many tasks are done
+
+        :return: The number of tasks in the list that are done
+        :rtype: int
+        """
+        return reduce(lambda acc, t: acc + 1 if t.done else acc, self.tasks, 0)
+
 
 class TUI:
     """Runs the interactive terminal-based interface for the app
@@ -126,10 +135,15 @@ class TUI:
         # Set up test content
         Config.set("print_done_tasks", "yes")
         cls.lists.append(List("Main"))
-        test_list = TUI.lists[0]
+        test_list = cls.lists[0]
         test_list.tasks.append(Task("Hello world!"))
         test_list.tasks.append(Task("How are you?"))
+        test_list.tasks.append(Task("I'm fine, thanks"))
+        test_list.tasks.append(Task("The weather is horrible"))
+        test_list.tasks.append(Task("It's freezing and wet"))
         test_list.tasks[1].done = True
+        test_list.tasks[2].done = True
+        print(cls.lists[0].count_done())
 
         cls._render()
 
