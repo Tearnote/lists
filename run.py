@@ -100,11 +100,15 @@ class List:
         return result
 
 
-just_fix_windows_console()
+def run_tui():
+    just_fix_windows_console()
 
-Config.set("print_done_tasks", "yes")
-todo = List()
-todo.tasks.append(Task("Hello world!"))
-todo.tasks.append(Task("How are you?"))
-todo.tasks[1].done = True
-print(todo)
+    Config.set("print_done_tasks", "yes")
+    todo = List()
+    todo.tasks.append(Task("Hello world!"))
+    todo.tasks.append(Task("How are you?"))
+    todo.tasks[1].done = True
+    print(todo)
+
+
+run_tui()
