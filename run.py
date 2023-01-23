@@ -152,9 +152,11 @@ class TUI:
         """Redraw the screen contents
         """
         for i in range(len(cls.lists)):
+            lst = cls.lists[i]
             idx = "#" + str(i)
-            name = cls.lists[i].name
-            print(idx + " " + name)
+            name = lst.name
+            badge = str(lst.count_done()) + "/" + str(len(lst.tasks))
+            print(idx + " " + name + " (" + badge + ")")
 
 
 TUI.run()
