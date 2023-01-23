@@ -137,8 +137,8 @@ class TUI:
     def _render(cls):
         """Redraw the screen contents
         """
-        for lst in cls.lists:
-            print(lst)
+        for i in range(len(cls.lists)):
+            print("#" + str(i) + " " + cls.lists[i].name)
 
 
 TUI.run()
