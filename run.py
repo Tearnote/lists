@@ -156,7 +156,12 @@ class TUI:
         test_list.tasks[3].done = True
         test_list.tasks[4].done = True
 
-        cls._render()
+        # Main loop
+        while True:
+            cls._render()
+            command = input("> ")
+            if command == "exit":
+                break
 
     @classmethod
     def _render(cls):
@@ -181,9 +186,6 @@ class TUI:
 
         # Print the result message
         put("Welcome to Lists.\n")
-
-        # Add the prompt
-        put("> ")
 
 
 TUI.run()
