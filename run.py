@@ -67,7 +67,7 @@ class Task:
 class List:
     """An ordered, printable list of tasks
 
-    :param tasks: The list of tasks, can be freely accessed
+    :param tasks: List of initial :class:`Task`s
     :type tasks: list, optional
     """
 
@@ -76,7 +76,7 @@ class List:
         """
         if tasks is None:
             tasks = []
-        self.tasks = tasks
+        self._tasks = tasks
 
     def __str__(self):
         """Print the list as numbered tasks, one per line
@@ -84,8 +84,8 @@ class List:
         Done tasks are greyed out.
         """
         result = ""
-        for i in range(len(self.tasks)):
-            task = self.tasks[i]
+        for i in range(len(self._tasks)):
+            task = self._tasks[i]
             if Config.get("print_done_tasks") == "no" and task.done:
                 continue
             if not task.done:
@@ -102,7 +102,7 @@ class List:
         :param task: task to be added
         :type task: :class:`Task`
         """
-        self.tasks.append(task)
+        self._tasks.append(task)
 
 
 just_fix_windows_console()
@@ -111,5 +111,4 @@ Config.set("print_done_tasks", "yes")
 todo = List()
 todo.add(Task("Hello world!"))
 todo.add(Task("How are you?"))
-todo.tasks[1].done = True
 print(todo)
