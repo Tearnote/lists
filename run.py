@@ -50,7 +50,7 @@ class Task:
     def __str__(self):
         """Make tasks printable
 
-        Inserts ANSI color, and follows the print_done_tasks config var
+        Inserts ANSI color, and follows the print_done_tasks config var.
         """
         if not self.done:
             return self.body
@@ -65,14 +65,22 @@ class Task:
 
 
 class List:
-    """An ordered, printable list of tasks"""
+    """An ordered, printable list of tasks
 
-    def __init__(self):
+    :param tasks: The list of tasks, can be freely accessed
+    :type tasks: list, optional
+    """
+
+    def __init__(self, tasks=None):
         """Constructor method
         """
-        self.tasks = []
+        if tasks is None:
+            tasks = []
+        self.tasks = tasks
 
     def __str__(self):
+        """Print the list as numbered tasks, one per line
+        """
         return reduce(
             lambda acc, n_task:
             acc + "#" + str(n_task[0]) + " " + str(n_task[1]) + "\n",
@@ -80,12 +88,19 @@ class List:
             "")
 
     def add(self, task):
+        """Append a task to the end of the list
+
+        :param task: task to be added
+        :type task: :class:`Task`
+        """
         self.tasks.append(task)
 
 
 just_fix_windows_console()
 
-task = Task("Hello World!")
+Config.set("print_done_tasks", "yes")
 todo = List()
-todo.add(task)
+todo.add(Task("Hello world!"))
+todo.add(Task("How are you?"))
+todo.tasks[1].done = True
 print(todo)
