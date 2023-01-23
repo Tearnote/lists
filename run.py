@@ -67,6 +67,9 @@ class Task:
 class List:
     """An ordered, printable list of tasks
 
+    Keep in mind that the tasks are printed starting from 1. When accessing
+    tasks based on user input, you will need to subtract one.
+
     :param tasks: List of :class:`Task`s in the list. Can be freely manipulated
     :type tasks: list, optional
     """
@@ -92,7 +95,7 @@ class List:
                 result += Fore.LIGHTWHITE_EX
             else:
                 result += Fore.LIGHTBLACK_EX
-            result += "#" + str(i) + " " + str(task) + "\n"
+            result += "#" + str(i + 1) + " " + str(task) + "\n"
 
         return result
 
