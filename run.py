@@ -1,3 +1,5 @@
+from enum import Enum, auto
+
 from colorama import just_fix_windows_console, Fore
 
 
@@ -101,13 +103,20 @@ class TUI:
     """Runs the interactive terminal-based interface for the app
     """
 
+    class State(Enum):
+        NONE = 0
+        LIST_VIEW = auto()
+
     CONSOLE_SIZE = (80, 25)  # (w,h) column/row count
 
+    state = State.NONE
     lists = []  # All to-do lists owned by the user
 
     @classmethod
     def run(cls):
+        # Initialize
         just_fix_windows_console()
+        cls.state = cls.State.LIST_VIEW
 
         # Set up test content
         Config.set("print_done_tasks", "yes")
@@ -116,7 +125,13 @@ class TUI:
         test_list.tasks.append(Task("Hello world!"))
         test_list.tasks.append(Task("How are you?"))
         test_list.tasks[1].done = True
-        print(test_list)
+
+        cls.render()
+
+    @classmethod
+    def render(cls):
+        for lst in cls.lists:
+            print(lst)
 
 
 TUI.run()
