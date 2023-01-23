@@ -181,8 +181,7 @@ class TUI:
             put(idx + " " + name + " (" + badge + ")\n")
 
         # Print newlines until we're near the bottom
-        for _ in range(cls.CONSOLE_SIZE[1] - len(cls.lists) - 2):
-            put("\n")
+        put("\n" * (cls.CONSOLE_SIZE[1] - len(cls.lists) - 2))
 
         # Print the result message
         put("Welcome to Lists.\n")
