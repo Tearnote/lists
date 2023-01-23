@@ -130,7 +130,8 @@ class TUI:
 
     CONSOLE_SIZE = (80, 25)  # (w,h) column/row count
 
-    state = State.NONE
+    state = State.NONE  # Current view of the global state machine
+    last_result = "Welcome to Lists."  # Feedback from the most recent command
     lists = []  # All to-do lists owned by the user
 
     @classmethod
@@ -184,7 +185,7 @@ class TUI:
         put("\n" * (cls.CONSOLE_SIZE[1] - len(cls.lists) - 2))
 
         # Print the result message
-        put("Welcome to Lists.\n")
+        put(cls.last_result + "\n")
 
 
 TUI.run()
