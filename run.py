@@ -1,7 +1,4 @@
-from functools import reduce
-from itertools import count
-
-from colorama import just_fix_windows_console, Fore, Style
+from colorama import just_fix_windows_console, Fore
 
 
 class Config:
