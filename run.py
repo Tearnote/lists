@@ -1,7 +1,7 @@
 from enum import Enum, auto
 from functools import reduce
 
-from colorama import just_fix_windows_console, Fore
+from colorama import just_fix_windows_console, Fore, Style
 
 
 def put(text):
@@ -162,8 +162,7 @@ class TUI:
         while cls.state != cls.State.SHUTDOWN:
             cls._render()
             command = input("> ")
-            if command == "exit":
-                cls.state = cls.State.SHUTDOWN
+            cls._parse(command)
 
     @classmethod
     def _render(cls):
@@ -187,6 +186,24 @@ class TUI:
 
         # Print the result message
         put(cls.last_result + "\n")
+
+    @classmethod
+    def _parse(cls, cmd):
+        """Parse a user-input command
+
+        The input will be cleaned up, and the matching action will be executed.
+        :param cmd: Command as input by the user
+        :type cmd: str
+        """
+
+        # Sanitization
+        cmd = cmd.strip()
+        cmd = cmd.lower()
+
+        if cmd == "exit":
+            cls.state = cls.State.SHUTDOWN
+        else:
+            cls.last_result = Fore.RED + "Unknown command." + Style.RESET_ALL
 
 
 TUI.run()
