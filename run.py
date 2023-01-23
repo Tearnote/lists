@@ -138,7 +138,9 @@ class TUI:
         """Redraw the screen contents
         """
         for i in range(len(cls.lists)):
-            print("#" + str(i) + " " + cls.lists[i].name)
+            idx = "#" + str(i)
+            name = cls.lists[i].name
+            print(idx + " " + name)
 
 
 TUI.run()
