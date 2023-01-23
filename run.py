@@ -50,7 +50,7 @@ class Task:
     def __str__(self):
         """Make tasks printable
 
-        Inserts ANSI color, and follows the print_done_tasks config var.
+        Follows the print_done_tasks config var to adjust returned contents.
         """
         if not self.done:
             return self.body
@@ -59,9 +59,9 @@ class Task:
         if print_type == "no":
             return ""
         elif print_type == "hidden":
-            return Fore.LIGHTBLACK_EX + "==="
+            return "==="
         else:  # print_type == "yes"
-            return Fore.LIGHTBLACK_EX + self.body
+            return self.body
 
 
 class List:
@@ -80,12 +80,18 @@ class List:
 
     def __str__(self):
         """Print the list as numbered tasks, one per line
+
+        Done tasks are greyed out.
         """
-        return reduce(
-            lambda acc, n_task:
-            acc + "#" + str(n_task[0]) + " " + str(n_task[1]) + "\n",
-            zip(count(), self.tasks),
-            "")
+        result = ""
+        for i in range(len(self.tasks)):
+            task = self.tasks[i]
+            if Config.get("print_done_tasks") == "no" and task.done:
+                continue
+            result += Fore.LIGHTWHITE_EX if not task.done else Fore.LIGHTBLACK_EX
+            result += "#" + str(i) + " " + str(task) + "\n"
+
+        return result
 
     def add(self, task):
         """Append a task to the end of the list
