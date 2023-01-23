@@ -44,8 +44,31 @@ class Task:
         self.body = body
         self.done = done
 
+    def __str__(self):
+        """Make tasks printable
+
+        Inserts ANSI color, and follows the print_done_tasks config var
+        """
+        if not self.done:
+            return self.body
+
+        print_type = Config.get("print_done_tasks")
+        if print_type == "no":
+            return ""
+        elif print_type == "hidden":
+            return Fore.LIGHTBLACK_EX + "==="
+        else:  # print_type == "yes"
+            return Fore.LIGHTBLACK_EX + self.body
+
 
 just_fix_windows_console()
 
-task = Task(Fore.GREEN + "Hello" + Fore.BLUE + " World" + Style.RESET_ALL + "!")
-print(task.body)
+task = Task("Hello World!")
+print(task)
+task.done = True
+Config.set("print_done_tasks", "yes")
+print(task)
+Config.set("print_done_tasks", "hidden")
+print(task)
+Config.set("print_done_tasks", "no")
+print(task)
