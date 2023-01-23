@@ -88,7 +88,10 @@ class List:
             task = self.tasks[i]
             if Config.get("print_done_tasks") == "no" and task.done:
                 continue
-            result += Fore.LIGHTWHITE_EX if not task.done else Fore.LIGHTBLACK_EX
+            if not task.done:
+                result += Fore.LIGHTWHITE_EX
+            else:
+                result += Fore.LIGHTBLACK_EX
             result += "#" + str(i) + " " + str(task) + "\n"
 
         return result
