@@ -209,6 +209,7 @@ class TUI:
 
         if cmd == "exit":
             cls._change_state(cls.State.SHUTDOWN)
+            put("Goodbye!\n")
         elif cmd == "help":
             cls._change_state(cls.State.HELP)
             cls.last_result = "Help displayed. Input anything to return."
