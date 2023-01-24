@@ -126,6 +126,7 @@ class TUI:
 
     class State(Enum):
         NONE = 0  # Initial state
+        HELP = auto()  # Help screen
         LIST_VIEW = auto()  # Displaying list overview
         SHUTDOWN = auto()  # Shutdown requested
 
@@ -168,21 +169,25 @@ class TUI:
     def _render(cls):
         """Redraw the screen contents
         """
+        if cls.state == cls.State.HELP:
+            # Print newlines until we're near the bottom
+            put("\n" * (cls.CONSOLE_SIZE[1] - len(cls.lists) - 2))
 
-        # Print the lists
-        for i in range(len(cls.lists)):
-            lst = cls.lists[i]
-            idx = "#" + str(i)
-            name = lst.name
-            done_count = lst.count_done()
-            task_count = len(lst.tasks)
-            badge = "done!"
-            if done_count < task_count:
-                badge = str(done_count) + "/" + str(task_count)
-            put(idx + " " + name + " (" + badge + ")\n")
+        elif cls.state == cls.State.LIST_VIEW:
+            # Print the lists
+            for i in range(len(cls.lists)):
+                lst = cls.lists[i]
+                idx = "#" + str(i)
+                name = lst.name
+                done_count = lst.count_done()
+                task_count = len(lst.tasks)
+                badge = "done!"
+                if done_count < task_count:
+                    badge = str(done_count) + "/" + str(task_count)
+                put(idx + " " + name + " (" + badge + ")\n")
 
-        # Print newlines until we're near the bottom
-        put("\n" * (cls.CONSOLE_SIZE[1] - len(cls.lists) - 2))
+            # Print newlines until we're near the bottom
+            put("\n" * (cls.CONSOLE_SIZE[1] - len(cls.lists) - 2))
 
         # Print the result message
         put(cls.last_result + "\n")
@@ -195,13 +200,15 @@ class TUI:
         :param cmd: Command as input by the user
         :type cmd: str
         """
-
         # Sanitization
         cmd = cmd.strip()
         cmd = cmd.lower()
 
         if cmd == "exit":
             cls.state = cls.State.SHUTDOWN
+        elif cmd == "help":
+            cls.state = cls.State.HELP
+            cls.last_result = "Help displayed. Input anything to return."
         elif cmd == "":
             cls.last_result = "Type \"help\" for assistance."
         else:
