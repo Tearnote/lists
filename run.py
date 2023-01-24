@@ -286,8 +286,8 @@ class TUI:
         cls.state = cls.State.LIST_VIEW
 
         # Set up commands
-        quit_command = Command("quit", cls._cmd_exit)
-        cls.list_view_commands.append(quit_command)
+        exit_command = Command("exit", cls._cmd_exit)
+        cls.list_view_commands.append(exit_command)
         help_command = Command("help", cls._cmd_help)
         cls.list_view_commands.append(help_command)
 
