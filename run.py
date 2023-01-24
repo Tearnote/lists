@@ -192,11 +192,17 @@ class TUI:
         lines_printed = 0
 
         if cls.state == cls.State.HELP:
+            put("=== HELP ===\n")
+            put("\n")
+            lines_printed += 2
             for line in cls.HELP_TEXT:
                 put(line + "\n")
             lines_printed += len(cls.HELP_TEXT)
 
         elif cls.state == cls.State.LIST_VIEW:
+            put("=== LISTS ===\n")
+            put("\n")
+            lines_printed += 2
             # Print the lists
             for i in range(len(cls.lists)):
                 lst = cls.lists[i]
