@@ -276,6 +276,7 @@ class TUI:
         """
         cls.state = cls.previous_state
         cls.previous_state = cls.State.NONE
+        cls.last_result = "Welcome to Lists."
 
 
 TUI.run()
