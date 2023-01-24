@@ -131,6 +131,25 @@ class TUI:
         SHUTDOWN = auto()  # Shutdown requested
 
     CONSOLE_SIZE = (80, 25)  # (w,h) column/row count
+    HELP_TEXT = [
+        "Lists is controlled with text commands. You can see the list of",
+        "available commands in the pane on the right.",
+        "",
+        "The symbol \"#\" refers to an item index, for example the number",
+        "of a list or a task. You can see the index next to each item",
+        "on the main screen, for example:",
+        "",
+        f"#{Fore.GREEN}2{Style.RESET_ALL} Wash the dishes",
+        "",
+        "The symbol \"...\" stands for any text of your choice, like the full",
+        "description of a new task. Surrounding the text in quotes",
+        "is not required.",
+        "",
+        "You can also receive help on a specific command, as long as it's",
+        "available from the current screen:",
+        "",
+        f"help {Fore.GREEN}delete{Style.RESET_ALL}",
+    ]
 
     state = State.NONE  # Current view of the global state machine
     previous_state = State.NONE  # State "undo" support
@@ -173,8 +192,9 @@ class TUI:
         lines_printed = 0
 
         if cls.state == cls.State.HELP:
-            put("TODO: Help text")
-            lines_printed = 1
+            for line in cls.HELP_TEXT:
+                put(line + "\n")
+            lines_printed += len(cls.HELP_TEXT)
 
         elif cls.state == cls.State.LIST_VIEW:
             # Print the lists
@@ -188,7 +208,7 @@ class TUI:
                 if done_count < task_count:
                     badge = str(done_count) + "/" + str(task_count)
                 put(idx + " " + name + " (" + badge + ")\n")
-            lines_printed = len(cls.lists)
+            lines_printed += len(cls.lists)
 
         # Print newlines until we're near the bottom
         put("\n" * (cls.CONSOLE_SIZE[1] - lines_printed - 2))
