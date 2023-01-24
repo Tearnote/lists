@@ -258,7 +258,7 @@ class TUI:
         SHUTDOWN = auto()  # Shutdown requested
 
     CONSOLE_SIZE = (80, 25)  # (w,h) column/row count
-    HELP_TEXT = [
+    GENERAL_HELP = [
         "Lists is controlled with text commands. You can see the list of",
         "available commands in the pane on the right.",
         "",
@@ -282,6 +282,7 @@ class TUI:
     state = State.NONE  # Current view of the global state machine
     previous_state = State.NONE  # State "undo" support
     last_result = "Welcome to Lists."  # Feedback from the most recent command
+    help_text = []  # List of lines shown on the screen in the help state
     lists = []  # All to-do lists owned by the user
     list_view_commands = []  # Set of commands available in LIST_VIEW state
 
@@ -330,9 +331,9 @@ class TUI:
             put("\n")
             lines_printed += 2
             # Print help text
-            for line in cls.HELP_TEXT:
+            for line in cls.help_text:
                 put(line + "\n")
-            lines_printed += len(cls.HELP_TEXT)
+            lines_printed += len(cls.help_text)
 
         elif cls.state == cls.State.LIST_VIEW:
             # Print the header
@@ -460,11 +461,13 @@ class TUI:
         _, text = args
         cls._change_state(cls.State.HELP)
         if text != "":
+            cls.help_text = [f"TODO command {text} help text"]
             cls.last_result = (
                 f"Help for command "
                 f"\"{text}\""
                 f" displayed. Input anything to return.")
         else:
+            cls.help_text = cls.GENERAL_HELP
             cls.last_result = "Help displayed. Input anything to return."
 
 
