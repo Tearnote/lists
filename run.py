@@ -459,16 +459,28 @@ class TUI:
         :param *args: Tuple of (_, text)
         """
         _, text = args
-        cls._change_state(cls.State.HELP)
-        if text != "":
-            cls.help_text = [f"TODO command {text} help text"]
-            cls.last_result = (
-                f"Help for command "
-                f"\"{text}\""
-                f" displayed. Input anything to return.")
-        else:
+        if text != "":  # Command-specific help
+            try:
+                command = cls._find_command(text)
+                cls.help_text = [f"TODO command {command.keyword} help text"]
+                cls.last_result = (
+                    f"Help for command "
+                    f"\"{text}\""
+                    f" displayed. Input anything to return.")
+                cls._change_state(cls.State.HELP)
+            except StopIteration:
+                cls.last_result = (
+                    f"{Fore.RED}"
+                    f"Help for command "
+                    f"\"{text}\""
+                    f" not found"
+                    f"{Style.RESET_ALL}"
+                )
+
+        else:  # General help
             cls.help_text = cls.GENERAL_HELP
             cls.last_result = "Help displayed. Input anything to return."
+            cls._change_state(cls.State.HELP)
 
 
 TUI.run()
