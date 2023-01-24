@@ -296,7 +296,7 @@ class TUI:
         # Set up commands
         exit_command = Command("exit", cls._cmd_exit)
         cls.list_view_commands.append(exit_command)
-        help_command = Command("help", cls._cmd_help)
+        help_command = Command("help", cls._cmd_help, has_text_arg=True)
         cls.list_view_commands.append(help_command)
 
         # Set up test content
@@ -436,20 +436,25 @@ class TUI:
     @classmethod
     def _cmd_exit(cls, *_):
         """Terminate the main loop
-
-        :param **kwargs: unused
         """
         cls._change_state(cls.State.SHUTDOWN)
         put("Goodbye!\n")
 
     @classmethod
-    def _cmd_help(cls, *_):
+    def _cmd_help(cls, *args):
         """Switch to help state
 
-        :param **kwargs: unused
+        :param *args: Tuple of (_, text)
         """
+        _, text = args
         cls._change_state(cls.State.HELP)
-        cls.last_result = "Help displayed. Input anything to return."
+        if text != "":
+            cls.last_result = (
+                f"Help for command "
+                f"\"{text}\""
+                f" displayed. Input anything to return.")
+        else:
+            cls.last_result = "Help displayed. Input anything to return."
 
 
 TUI.run()
