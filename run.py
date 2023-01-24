@@ -420,7 +420,7 @@ class TUI:
         cls.last_result = "Welcome to Lists."
 
     @classmethod
-    def _cmd_exit(cls, *args):
+    def _cmd_exit(cls, *_):
         """Terminate the main loop
 
         :param **kwargs: unused
@@ -429,7 +429,7 @@ class TUI:
         put("Goodbye!\n")
 
     @classmethod
-    def _cmd_help(cls, *args):
+    def _cmd_help(cls, *_):
         """Switch to help state
 
         :param **kwargs: unused
