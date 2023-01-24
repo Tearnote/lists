@@ -223,6 +223,7 @@ class TUI:
     previous_state = State.NONE  # State "undo" support
     last_result = "Welcome to Lists."  # Feedback from the most recent command
     lists = []  # All to-do lists owned by the user
+    list_view_commands = []  # Set of commands available in LIST_VIEW state
 
     @classmethod
     def run(cls):
@@ -231,6 +232,12 @@ class TUI:
         # Initialize
         just_fix_windows_console()
         cls.state = cls.State.LIST_VIEW
+
+        # Set up commands
+        quit_command = Command("quit", cls._cmd_exit)
+        cls.list_view_commands.append(quit_command)
+        help_command = Command("help", cls._cmd_help)
+        cls.list_view_commands.append(help_command)
 
         # Set up test content
         Config.set("print_done_tasks", "yes")
@@ -242,8 +249,6 @@ class TUI:
         test_list.tasks.append(Task("The weather is horrible"))
         test_list.tasks.append(Task("It's freezing and wet"))
         test_list.tasks[0].done = True
-        test_list.tasks[1].done = True
-        test_list.tasks[2].done = True
         test_list.tasks[3].done = True
         test_list.tasks[4].done = True
 
@@ -301,28 +306,29 @@ class TUI:
         :param cmd: Command as input by the user
         :type cmd: str
         """
-        user_input = UserInput.parse(cmd)
-
+        # Special cases
         if cls.state == cls.State.HELP:
             # Any input exits help state
             cls._undo_state()
-
-        elif user_input.keyword == "exit":
-            # Terminate main loop
-            cls._change_state(cls.State.SHUTDOWN)
-            put("Goodbye!\n")
-
-        elif user_input.keyword == "help":
-            # Switch to help state
-            cls._change_state(cls.State.HELP)
-            cls.last_result = "Help displayed. Input anything to return."
-
-        elif cmd == "":
+            return
+        if cmd == "":
             # Empty command. User is confused?
             cls.last_result = "Type \"help\" for assistance."
+            return
 
-        else:
-            cls.last_result = Fore.RED + "Unknown command." + Style.RESET_ALL
+        # Command parsing and execution
+        user_input = UserInput.parse(cmd)
+        command_list = []
+        if cls.state == cls.State.LIST_VIEW:
+            command_list = cls.list_view_commands
+        try:
+            command = next(
+                filter(lambda c: c.keyword == user_input.keyword, command_list))
+            command.callback(user_input)
+        except StopIteration:
+            cls.last_result = Fore.RED
+            cls.last_result += f"Unknown command \"{user_input.keyword}\""
+            cls.last_result += Style.RESET_ALL
 
     @classmethod
     def _change_state(cls, new_state):
@@ -341,6 +347,26 @@ class TUI:
         cls.state = cls.previous_state
         cls.previous_state = cls.State.NONE
         cls.last_result = "Welcome to Lists."
+
+    @classmethod
+    def _cmd_exit(cls, _):
+        """Terminate the main loop
+
+        :param _: unused
+        :type _: :class:`UserInput`
+        """
+        cls._change_state(cls.State.SHUTDOWN)
+        put("Goodbye!\n")
+
+    @classmethod
+    def _cmd_help(cls, _):
+        """Switch to help state
+
+        :param _: unused
+        :type _: :class:`UserInput`
+        """
+        cls._change_state(cls.State.HELP)
+        cls.last_result = "Help displayed. Input anything to return."
 
 
 TUI.run()
