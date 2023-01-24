@@ -214,8 +214,15 @@ class Command:
             raise ValueError  # This should not happen to begin with
 
         # Extract params
-        index = user_input.index_arg
-        text = user_input.text_arg if self.has_index_arg else user_input.args
+        if self.has_index_arg and not self.has_text_arg:
+            index = user_input.args
+            text = ""
+        elif not self.has_index_arg and self.has_text_arg:
+            index = ""
+            text = user_input.args
+        else:
+            index = user_input.index_arg
+            text = user_input.text_arg
 
         # Validate params
         if self.index_arg_required and index == "":
