@@ -378,12 +378,8 @@ class TUI:
 
         # Command parsing and execution
         user_input = UserInput.parse(cmd)
-        command_list = []
-        if cls.state == cls.State.LIST_VIEW:
-            command_list = cls.list_view_commands
         try:
-            command = next(
-                filter(lambda c: c.keyword == user_input.keyword, command_list))
+            command = cls._find_command(user_input.keyword)
             command.validate_and_run(user_input)
 
         except StopIteration:  # Command not found in list
@@ -414,6 +410,21 @@ class TUI:
                 f"\"{user_input.index_arg}\" "
                 f"is not valid"
                 f"{Style.RESET_ALL}")
+
+    @classmethod
+    def _find_command(cls, keyword):
+        """Return a command from the currently available state
+
+        :param keyword: Name of the commend
+        :type keyword: str
+        :return: Found command object
+        :rtype: :class:`Command`
+        :raises StopIteration: Command couldn't be found
+        """
+        command_list = []
+        if cls.state == cls.State.LIST_VIEW:
+            command_list = cls.list_view_commands
+        return next(filter(lambda c: c.keyword == keyword, command_list))
 
     @classmethod
     def _change_state(cls, new_state):
