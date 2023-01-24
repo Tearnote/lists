@@ -239,16 +239,20 @@ class TUI:
         cmd = cmd.strip()
         cmd = cmd.lower()
 
+        # Split into keyword and arguments
+        keyword, _, args = cmd.partition(" ")
+        args = args.strip()
+
         if cls.state == cls.State.HELP:
             # Any input exits help state
             cls._undo_state()
 
-        elif cmd == "exit":
+        elif keyword == "exit":
             # Terminate main loop
             cls._change_state(cls.State.SHUTDOWN)
             put("Goodbye!\n")
 
-        elif cmd == "help":
+        elif keyword == "help":
             # Switch to help state
             cls._change_state(cls.State.HELP)
             cls.last_result = "Help displayed. Input anything to return."
