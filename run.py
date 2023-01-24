@@ -161,6 +161,8 @@ class Command:
     :type keyword: str
     :param callback: Code to run on command execution
     :type callback: function(index: int, text: str)
+    :param help_text: Text shown about this command on the help screen
+    :type help_text: list of str
     :param has_index_arg: Whether the command accepts an index argument
     :type has_index_arg: bool, optional
     :param index_arg_required: If `has_index_arg` is True, whether the command
@@ -188,13 +190,14 @@ class Command:
         """
         pass
 
-    def __init__(self, keyword, callback,
+    def __init__(self, keyword, callback, help_text,
                  has_index_arg=False, index_arg_required=False,
                  has_text_arg=False, text_arg_required=False):
         """Constructor method
         """
         self.keyword = keyword
         self.callback = callback
+        self.help_text = help_text
         self.has_index_arg = has_index_arg
         self.index_arg_required = index_arg_required
         self.has_text_arg = has_text_arg
@@ -295,9 +298,24 @@ class TUI:
         cls.state = cls.State.LIST_VIEW
 
         # Set up commands
-        exit_command = Command("exit", cls._cmd_exit)
+        exit_command = Command("exit", cls._cmd_exit, [
+            f"Syntax: {Fore.GREEN}exit{Style.RESET_ALL}",
+            "",
+            "Leave the program immediately. All changes are saved."
+        ])
         cls.list_view_commands.append(exit_command)
-        help_command = Command("help", cls._cmd_help, has_text_arg=True)
+        help_command = Command("help", cls._cmd_help, [
+            f"Syntax (1): {Fore.GREEN}help{Style.RESET_ALL}",
+            f"Syntax (2): {Fore.GREEN}help ...{Style.RESET_ALL}",
+            "",
+            "In the (1) form, display general help about using Lists.",
+            "",
+            "In the (2) form, display help about a specific command.",
+            "The text argument is the name of the command, without any symbols",
+            "or arguments. The command must exist in the current view, so, for",
+            "example, in task view you won't be able to get help about",
+            "list-specific commands."
+        ], has_text_arg=True)
         cls.list_view_commands.append(help_command)
 
         # Set up test content
@@ -462,7 +480,7 @@ class TUI:
         if text != "":  # Command-specific help
             try:
                 command = cls._find_command(text)
-                cls.help_text = [f"TODO command {command.keyword} help text"]
+                cls.help_text = command.help_text
                 cls.last_result = (
                     f"Help for command "
                     f"\"{text}\""
