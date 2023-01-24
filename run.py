@@ -120,6 +120,38 @@ class List:
         return reduce(lambda acc, t: acc + 1 if t.done else acc, self.tasks, 0)
 
 
+class Command:
+    """A user command, which might accept arguments and runs provided code
+
+    :param keyword: Name of the command
+    :type keyword: str
+    :param callback: Code to run on command execution
+    :type callback: function
+    :param has_index_arg: Whether the command accepts an index argument
+    :type has_index_arg: bool, optional
+    :param index_arg_required: If `has_index_arg` is True, whether the command
+    requires the index argument
+    :type index_arg_required: bool, optional
+    :param has_text_arg: Whether the command accepts a string argument
+    :type has_text_arg: bool, optional
+    :param text_arg_required: If `has_text_arg` is True, whether the command
+    requires the string argument
+    :type text_arg_required: bool, optional
+    """
+
+    def __init__(self, keyword, callback,
+                 has_index_arg=False, index_arg_required=False,
+                 has_text_arg=False, text_arg_required=False):
+        """Constructor method
+        """
+        self.keyword = keyword
+        self.callback = callback
+        self.has_index_arg = has_index_arg
+        self.index_arg_required = index_arg_required
+        self.has_text_arg = has_text_arg
+        self.text_arg_required = text_arg_required
+
+
 class TUI:
     """Runs the interactive terminal-based interface for the app
     """
