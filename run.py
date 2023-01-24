@@ -379,27 +379,33 @@ class TUI:
             command.validate_and_run(user_input)
 
         except StopIteration:  # Command not found in list
-            cls.last_result = Fore.RED
-            cls.last_result += f"Unknown command \"{user_input.keyword}\""
-            cls.last_result += Style.RESET_ALL
+            cls.last_result = (
+                f"{Fore.RED}"
+                f"Unknown command "
+                f"\"{user_input.keyword}\""
+                f"{Style.RESET_ALL}")
 
         except Command.MissingArgument:
-            cls.last_result = Fore.RED
-            cls.last_result += "Not enough arguments provided for command "
-            cls.last_result += user_input.keyword
-            cls.last_result += Style.RESET_ALL
+            cls.last_result = (
+                f"{Fore.RED}"
+                f"Not enough arguments provided for command "
+                f"\"{user_input.keyword}\""
+                f"{Style.RESET_ALL}")
 
         except Command.TooManyArguments:
-            cls.last_result = Fore.RED
-            cls.last_result += "Too many arguments provided for command \""
-            cls.last_result += user_input.keyword
-            cls.last_result += Style.RESET_ALL
+            cls.last_result = (
+                f"{Fore.RED}"
+                f"Too many arguments provided for command "
+                f"\"{user_input.keyword}\""
+                f"{Style.RESET_ALL}")
 
         except Command.InvalidIndex:
-            cls.last_result = Fore.RED
-            cls.last_result += f"Index value \"{user_input.index_arg}\" "
-            cls.last_result += "is not valid"
-            cls.last_result += Style.RESET_ALL
+            cls.last_result = (
+                f"{Fore.RED}"
+                f"Index value "
+                f"\"{user_input.index_arg}\" "
+                f"is not valid"
+                f"{Style.RESET_ALL}")
 
     @classmethod
     def _change_state(cls, new_state):
