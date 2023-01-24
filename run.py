@@ -133,6 +133,7 @@ class TUI:
     CONSOLE_SIZE = (80, 25)  # (w,h) column/row count
 
     state = State.NONE  # Current view of the global state machine
+    previous_state = State.NONE  # State "undo" support
     last_result = "Welcome to Lists."  # Feedback from the most recent command
     lists = []  # All to-do lists owned by the user
 
@@ -169,7 +170,7 @@ class TUI:
     def _render(cls):
         """Redraw the screen contents
         """
-        lines_printed = 0  #
+        lines_printed = 0
 
         if cls.state == cls.State.HELP:
             pass
@@ -207,14 +208,24 @@ class TUI:
         cmd = cmd.lower()
 
         if cmd == "exit":
-            cls.state = cls.State.SHUTDOWN
+            cls._change_state(cls.State.SHUTDOWN)
         elif cmd == "help":
-            cls.state = cls.State.HELP
+            cls._change_state(cls.State.HELP)
             cls.last_result = "Help displayed. Input anything to return."
         elif cmd == "":
             cls.last_result = "Type \"help\" for assistance."
         else:
             cls.last_result = Fore.RED + "Unknown command." + Style.RESET_ALL
+
+    @classmethod
+    def _change_state(cls, new_state):
+        """Switch TUI state to a new one
+
+        :param new_state: The new state to replace the current one
+        :type new_state: :class:`TUI.State`
+        """
+        cls.previous_state = cls.state
+        cls.state = new_state
 
 
 TUI.run()
