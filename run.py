@@ -120,6 +120,40 @@ class List:
         return reduce(lambda acc, t: acc + 1 if t.done else acc, self.tasks, 0)
 
 
+class UserInput:
+    """Parsed representation of a user input
+
+    :param keyword: The command the user is invoking
+    :type keyword: str
+    :param args: All text after the keyword
+    :type args: str
+    :param index_arg: Index part of args, if present
+    :type index_arg: str
+    :param text_arg: All text after index_arg, if present
+    :type text_arg: str
+    """
+
+    def __init__(self, keyword, args, index_arg, text_arg):
+        self.keyword = keyword
+        self.args = args
+        self.index_arg = index_arg
+        self.text_arg = text_arg
+
+    @classmethod
+    def parse(cls, cmd):
+        """Parse a string input by the user into a clean command input
+
+        :param cmd: Full string of text entered by the user
+        :type cmd: str
+        """
+        cmd = cmd.lower().strip()
+        keyword, _, args = cmd.partition(" ")
+        args = args.strip()
+        index_arg, _, text_arg = args.partition(" ")
+        text_arg = text_arg.strip()
+        return cls(keyword, args, index_arg, text_arg)
+
+
 class Command:
     """A user command, which might accept arguments and runs provided code
 
@@ -267,24 +301,18 @@ class TUI:
         :param cmd: Command as input by the user
         :type cmd: str
         """
-        # Sanitization
-        cmd = cmd.strip()
-        cmd = cmd.lower()
-
-        # Split into keyword and arguments
-        keyword, _, args = cmd.partition(" ")
-        args = args.strip()
+        user_input = UserInput.parse(cmd)
 
         if cls.state == cls.State.HELP:
             # Any input exits help state
             cls._undo_state()
 
-        elif keyword == "exit":
+        elif user_input.keyword == "exit":
             # Terminate main loop
             cls._change_state(cls.State.SHUTDOWN)
             put("Goodbye!\n")
 
-        elif keyword == "help":
+        elif user_input.keyword == "help":
             # Switch to help state
             cls._change_state(cls.State.HELP)
             cls.last_result = "Help displayed. Input anything to return."
