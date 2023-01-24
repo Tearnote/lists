@@ -267,8 +267,7 @@ class TUI:
         "the full description of a new task. Surrounding the text in quotes",
         "is not required.",
         "",
-        "You can also receive help on a specific command, as long as it's",
-        "available from the current screen:",
+        "You can also receive help on a specific command, like this:",
         "",
         f"help {Fore.GREEN}delete{Style.RESET_ALL}",
     ]
