@@ -160,7 +160,7 @@ class Command:
     :param keyword: Name of the command
     :type keyword: str
     :param callback: Code to run on command execution
-    :type callback: function
+    :type callback: function(index: int, text: str)
     :param has_index_arg: Whether the command accepts an index argument
     :type has_index_arg: bool, optional
     :param index_arg_required: If `has_index_arg` is True, whether the command
@@ -173,6 +173,21 @@ class Command:
     :type text_arg_required: bool, optional
     """
 
+    class MissingArgument(ValueError):
+        """User didn't provide the required arguments
+        """
+        pass
+
+    class TooManyArguments(ValueError):
+        """User provided an extraneous argument
+        """
+        pass
+
+    class InvalidIndex(ValueError):
+        """User-provided index cannot be converted to int
+        """
+        pass
+
     def __init__(self, keyword, callback,
                  has_index_arg=False, index_arg_required=False,
                  has_text_arg=False, text_arg_required=False):
@@ -184,6 +199,43 @@ class Command:
         self.index_arg_required = index_arg_required
         self.has_text_arg = has_text_arg
         self.text_arg_required = text_arg_required
+
+    def validate_and_run(self, user_input):
+        """Confirm that user's input has correct arguments, and run the callback
+
+        :param user_input: Parsed user input string
+        :type user_input: :class:`UserInput`
+        :raises ValueError: Invalid command for the input
+        :raises Command.MissingArgument: User didn't provide enough arguments
+        :raises Command.TooManyArguments: User provided too many arguments
+        :raises Command.InvalidIndex: User provided a non-integer index
+        """
+        if self.keyword != user_input.keyword:
+            raise ValueError  # This should not happen to begin with
+
+        # Extract params
+        index = user_input.index_arg
+        text = user_input.text_arg if self.has_index_arg else user_input.args
+
+        # Validate params
+        if self.index_arg_required and index == "":
+            raise self.MissingArgument
+        if self.text_arg_required and text == "":
+            raise self.MissingArgument
+        if not self.has_index_arg and index != "":
+            raise self.TooManyArguments
+        if not self.has_text_arg and text != "":
+            raise self.TooManyArguments
+
+        # Convert index to integer
+        index_int = -1
+        if index != "":
+            try:
+                index_int = int(index)
+            except ValueError:
+                raise self.InvalidIndex
+
+        self.callback(index_int, text)
 
 
 class TUI:
@@ -324,10 +376,29 @@ class TUI:
         try:
             command = next(
                 filter(lambda c: c.keyword == user_input.keyword, command_list))
-            command.callback(user_input)
-        except StopIteration:
+            command.validate_and_run(user_input)
+
+        except StopIteration:  # Command not found in list
             cls.last_result = Fore.RED
             cls.last_result += f"Unknown command \"{user_input.keyword}\""
+            cls.last_result += Style.RESET_ALL
+
+        except Command.MissingArgument:
+            cls.last_result = Fore.RED
+            cls.last_result += "Not enough arguments provided for command "
+            cls.last_result += user_input.keyword
+            cls.last_result += Style.RESET_ALL
+
+        except Command.TooManyArguments:
+            cls.last_result = Fore.RED
+            cls.last_result += "Too many arguments provided for command \""
+            cls.last_result += user_input.keyword
+            cls.last_result += Style.RESET_ALL
+
+        except Command.InvalidIndex:
+            cls.last_result = Fore.RED
+            cls.last_result += f"Index value \"{user_input.index_arg}\" "
+            cls.last_result += "is not valid"
             cls.last_result += Style.RESET_ALL
 
     @classmethod
@@ -349,21 +420,19 @@ class TUI:
         cls.last_result = "Welcome to Lists."
 
     @classmethod
-    def _cmd_exit(cls, _):
+    def _cmd_exit(cls, *args):
         """Terminate the main loop
 
-        :param _: unused
-        :type _: :class:`UserInput`
+        :param **kwargs: unused
         """
         cls._change_state(cls.State.SHUTDOWN)
         put("Goodbye!\n")
 
     @classmethod
-    def _cmd_help(cls, _):
+    def _cmd_help(cls, *args):
         """Switch to help state
 
-        :param _: unused
-        :type _: :class:`UserInput`
+        :param **kwargs: unused
         """
         cls._change_state(cls.State.HELP)
         cls.last_result = "Help displayed. Input anything to return."
