@@ -169,9 +169,10 @@ class TUI:
     def _render(cls):
         """Redraw the screen contents
         """
+        lines_printed = 0  #
+
         if cls.state == cls.State.HELP:
-            # Print newlines until we're near the bottom
-            put("\n" * (cls.CONSOLE_SIZE[1] - len(cls.lists) - 2))
+            pass
 
         elif cls.state == cls.State.LIST_VIEW:
             # Print the lists
@@ -185,9 +186,10 @@ class TUI:
                 if done_count < task_count:
                     badge = str(done_count) + "/" + str(task_count)
                 put(idx + " " + name + " (" + badge + ")\n")
+            lines_printed = len(cls.lists)
 
-            # Print newlines until we're near the bottom
-            put("\n" * (cls.CONSOLE_SIZE[1] - len(cls.lists) - 2))
+        # Print newlines until we're near the bottom
+        put("\n" * (cls.CONSOLE_SIZE[1] - lines_printed - 2))
 
         # Print the result message
         put(cls.last_result + "\n")
