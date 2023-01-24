@@ -125,6 +125,8 @@ class TUI:
     """
 
     class State(Enum):
+        """Symbols representing possible states of the UI
+        """
         NONE = 0  # Initial state
         HELP = auto()  # Help screen
         LIST_VIEW = auto()  # Displaying list overview
@@ -192,14 +194,17 @@ class TUI:
         lines_printed = 0
 
         if cls.state == cls.State.HELP:
+            # Print the header
             put("=== HELP ===\n")
             put("\n")
             lines_printed += 2
+            # Print help text
             for line in cls.HELP_TEXT:
                 put(line + "\n")
             lines_printed += len(cls.HELP_TEXT)
 
         elif cls.state == cls.State.LIST_VIEW:
+            # Print the header
             put("=== LISTS ===\n")
             put("\n")
             lines_printed += 2
@@ -216,7 +221,7 @@ class TUI:
                 put(idx + " " + name + " (" + badge + ")\n")
             lines_printed += len(cls.lists)
 
-        # Print newlines until we're near the bottom
+        # Print newlines until we're 2 lines away from the bottom
         put("\n" * (cls.CONSOLE_SIZE[1] - lines_printed - 2))
 
         # Print the result message
