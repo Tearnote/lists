@@ -193,6 +193,17 @@ class TUI:
                 f"{Style.RESET_ALL}")
 
     @classmethod
+    def _get_command_list(cls):
+        """Return the current state's command list
+
+        :return: list of currently applicable :class:`Command`s
+        :rtype: list
+        """
+        if cls.state == cls.State.LIST_VIEW:
+            return cls.list_view_commands
+        raise AssertionError  # This should be unreachable
+
+    @classmethod
     def _find_command(cls, keyword):
         """Return a command from the currently available state
 
@@ -202,9 +213,7 @@ class TUI:
         :rtype: :class:`Command`
         :raises StopIteration: Command couldn't be found
         """
-        command_list = []
-        if cls.state == cls.State.LIST_VIEW:
-            command_list = cls.list_view_commands
+        command_list = cls._get_command_list()
         return next(filter(lambda c: c.keyword == keyword, command_list))
 
     @classmethod
