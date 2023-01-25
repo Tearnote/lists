@@ -21,7 +21,7 @@ class TUI:
         LIST_VIEW = auto()  # Displaying list overview
         SHUTDOWN = auto()  # Shutdown requested
 
-    CONSOLE_SIZE = (80, 25)  # (w,h) column/row count
+    CONSOLE_SIZE = (80, 24)  # (w,h) column/row count
     SIDE_PANE_WIDTH = 16
     GENERAL_HELP = [
         "Lists is controlled with text commands. You can see the list of",
