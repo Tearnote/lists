@@ -79,6 +79,14 @@ class TUI:
             "list-specific commands."
         ], has_text_arg=True)
         cls.list_view_commands.append(help_command)
+        add_command = Command("add", cls._cmd_add, [
+            f"Syntax: {Fore.GREEN}add ...{Style.RESET_ALL}",
+            "",
+            "Add a new empty list with the provided name. After adding",
+            "the list, you will probably want to enter it with",
+            "the \"#\" command (just the list index), and add some tasks to it."
+        ], has_text_arg=True, text_arg_required=True)
+        cls.list_view_commands.append(add_command)
 
         # Set up test content
         Config.set("print_done_tasks", "yes")
@@ -275,3 +283,11 @@ class TUI:
             cls.help_text = cls.GENERAL_HELP
             cls.last_result = "Help displayed. Input anything to return."
             cls._change_state(cls.State.HELP)
+
+    @classmethod
+    def _cmd_add(cls, *args):
+        """Add a new list
+
+        :param *args: Tuple of (_, text)
+        """
+        cls.lists.append(List(*args[1]))
