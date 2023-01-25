@@ -1,6 +1,6 @@
 from functools import reduce
 
-from colorama import just_fix_windows_console, Fore, Style
+from colorama import Fore
 
 from config import Config
 

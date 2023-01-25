@@ -2,11 +2,11 @@ from enum import Enum, auto
 
 from colorama import just_fix_windows_console, Fore, Style
 
-from util import put
 from config import Config
-from task import Task
-from list import List
 from input import UserInput, Command
+from list import List
+from task import Task
+from util import put
 
 
 class TUI:
