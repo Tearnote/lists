@@ -22,7 +22,7 @@ class TUI:
         SHUTDOWN = auto()  # Shutdown requested
 
     CONSOLE_SIZE = (80, 25)  # (w,h) column/row count
-    SIDE_PANE_WIDTH = 12
+    SIDE_PANE_WIDTH = 16
     GENERAL_HELP = [
         "Lists is controlled with text commands. You can see the list of",
         "available commands in the pane on the right.",
@@ -139,6 +139,10 @@ class TUI:
 
         # Print the result message
         put(f"{cls.last_result}\n")
+
+        # Print the sidebar
+        put(f"{Cursor.POS(cls.CONSOLE_SIZE[0] - cls.SIDE_PANE_WIDTH, 0)}=== COMMANDS ===\n")
+        put(Cursor.POS(0, cls.CONSOLE_SIZE[1]))
 
     @classmethod
     def _parse(cls, cmd):
