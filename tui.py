@@ -132,13 +132,13 @@ class TUI:
                 put(f"{idx} {name} ({badge})\n")
 
             # Print the sidebar
-            sidebar_offset = cls.CONSOLE_SIZE[0] - cls.SIDE_PANE_WIDTH
+            sidebar_offset = cls.CONSOLE_SIZE[0] - cls.SIDE_PANE_WIDTH - 1
             y_pos = 0
-            put_at(sidebar_offset, y_pos, f"=== COMMANDS ===\n")
+            put_at(sidebar_offset, y_pos, f" === COMMANDS ===\n")
             y_pos += 1
             for command in cls._get_command_list():
                 for invocation in command.invocations():
-                    put_at(sidebar_offset, y_pos, f"{invocation}")
+                    put_at(sidebar_offset, y_pos, f"| {invocation}\n")
                     y_pos += 1
 
         # Print the result message
