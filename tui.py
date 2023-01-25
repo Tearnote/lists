@@ -6,7 +6,7 @@ from config import Config
 from input import UserInput, Command
 from list import List
 from task import Task
-from console import put
+from console import put, clear
 
 
 class TUI:
@@ -103,6 +103,8 @@ class TUI:
     def _render(cls):
         """Redraw the screen contents
         """
+        clear(cls.CONSOLE_SIZE)
+
         lines_printed = 0
 
         if cls.state == cls.State.HELP:
