@@ -6,7 +6,7 @@ from config import Config
 from input import UserInput, Command
 from list import List
 from task import Task
-from util import put
+from console import put
 
 
 class TUI:
