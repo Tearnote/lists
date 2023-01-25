@@ -87,6 +87,14 @@ class TUI:
             "the \"#\" command (just the list index), and add some tasks to it."
         ], has_text_arg=True, text_arg_required=True)
         cls.list_view_commands.append(add_command)
+        remove_command = Command("remove", cls._cmd_remove, [
+            f"Syntax: {Fore.GREEN}remove #{Style.RESET_ALL}",
+            "",
+            "Remove the list under the given index. Be very careful with this",
+            "command, and always double-check the index - there is currently",
+            "no way to undo this operation."
+        ], has_index_arg=True, index_arg_required=True)
+        cls.list_view_commands.append(remove_command)
 
         # Set up test content
         Config.set("print_done_tasks", "yes")
@@ -296,3 +304,25 @@ class TUI:
         """
         cls.lists.append(List(args[1]))
         cls.last_result = f"List \"{args[1]}\" added."
+
+    @classmethod
+    def _cmd_remove(cls, *args):
+        """Remove a list
+
+        :param *args: Tuple of (index, _)
+        """
+        index = args[0] - 1
+
+        # Bound check
+        if index < 0 or index >= len(cls.lists):
+            cls.last_result = (
+                f"{Fore.RED}"
+                f"There is no list with index "
+                f"\"{args[0]}\"."
+                f"{Style.RESET_ALL}"
+            )
+            return
+
+        list_name = cls.lists[index].name
+        cls.lists.pop(index)
+        cls.last_result = f"List \"{list_name}\" removed."
