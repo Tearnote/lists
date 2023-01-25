@@ -293,3 +293,4 @@ class TUI:
         :param *args: Tuple of (_, text)
         """
         cls.lists.append(List(args[1]))
+        cls.last_result = f"List \"{args[1]}\" added."
