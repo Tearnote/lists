@@ -3,5 +3,8 @@ def put(text):
 
     :param text: The string to print
     :type text: str
+    :return: Number of characters printed
+    :rtype: int
     """
     print(text, end="")
+    return len(text)
