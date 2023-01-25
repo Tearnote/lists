@@ -135,7 +135,9 @@ class TUI:
                 done_count = lst.count_done()
                 task_count = len(lst.tasks)
                 badge = "done!"
-                if done_count < task_count:
+                if task_count == 0:
+                    badge = "empty"
+                elif done_count < task_count:
                     badge = f"{str(done_count)}/{str(task_count)}"
                 put(f"{idx} {name} ({badge})\n")
 
