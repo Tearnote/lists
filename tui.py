@@ -134,11 +134,13 @@ class TUI:
                 name = lst.name
                 done_count = lst.count_done()
                 task_count = len(lst.tasks)
-                badge = "done!"
+                badge = ""
                 if task_count == 0:
                     badge = "empty"
-                elif done_count < task_count:
+                else:
                     badge = f"{str(done_count)}/{str(task_count)}"
+                    if done_count == task_count:
+                        badge += ", done!"
                 put(f"{idx} {name} ({badge})\n")
 
             # Print the sidebar
