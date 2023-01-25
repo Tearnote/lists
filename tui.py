@@ -96,7 +96,8 @@ class TUI:
         # Main loop
         while cls.state != cls.State.SHUTDOWN:
             cls._render()
-            command = input("> ")
+            put_at(0, cls.CONSOLE_SIZE[1] - 1, "> ")
+            command = input()
             cls._parse(command)
 
     @classmethod
@@ -107,7 +108,7 @@ class TUI:
 
         if cls.state == cls.State.HELP:
             # Print the header
-            put("=== HELP ===\n")
+            put_at(0, 0, "=== HELP ===\n")
             put("\n")
             # Print help text
             for line in cls.help_text:
@@ -115,7 +116,7 @@ class TUI:
 
         elif cls.state == cls.State.LIST_VIEW:
             # Print the header
-            put("=== LISTS ===\n")
+            put_at(0, 0, "=== LISTS ===\n")
             put("\n")
 
             # Print the lists
@@ -130,12 +131,13 @@ class TUI:
                     badge = f"{str(done_count)}/{str(task_count)}"
                 put(f"{idx} {name} ({badge})\n")
 
-        # Print the result message
-        put_at(0, cls.CONSOLE_SIZE[1] - 1, f"{cls.last_result}\n")
+            # Print the sidebar
+            sidebar_offset = cls.CONSOLE_SIZE[0] - cls.SIDE_PANE_WIDTH
+            put_at(sidebar_offset, 0, f"=== COMMANDS ===\n")
+            put(Cursor.POS(0, cls.CONSOLE_SIZE[1]))
 
-        # Print the sidebar
-        put(f"{Cursor.POS(cls.CONSOLE_SIZE[0] - cls.SIDE_PANE_WIDTH, 0)}=== COMMANDS ===\n")
-        put(Cursor.POS(0, cls.CONSOLE_SIZE[1]))
+        # Print the result message
+        put_at(0, cls.CONSOLE_SIZE[1] - 2, f"{cls.last_result}\n")
 
     @classmethod
     def _parse(cls, cmd):
