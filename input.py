@@ -81,6 +81,23 @@ class Command:
         self.has_text_arg = has_text_arg
         self.text_arg_required = text_arg_required
 
+    def invocations(self):
+        """Return all the possible invocations of the command
+
+        :return: A list of strings that represent command invocations
+        :rtype: list
+        """
+        result = []
+        if not self.index_arg_required and not self.text_arg_required:
+            result.append(f"{self.keyword}")
+        if self.has_index_arg and not self.text_arg_required:
+            result.append(f"{self.keyword} #")
+        if self.has_index_arg and self.has_text_arg:
+            result.append(f"{self.keyword} # ...")
+        if not self.index_arg_required and self.has_text_arg:
+            result.append(f"{self.keyword} ...")
+        return result
+
     def validate_and_run(self, user_input):
         """Confirm that user's input has correct arguments, and run the callback
 
