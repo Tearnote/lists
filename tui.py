@@ -290,4 +290,4 @@ class TUI:
 
         :param *args: Tuple of (_, text)
         """
-        cls.lists.append(List(*args[1]))
+        cls.lists.append(List(args[1]))
