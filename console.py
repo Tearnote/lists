@@ -10,6 +10,19 @@ def put(text):
     print(text, end="")
 
 
+def put_at(x, y, text):
+    """Print a string at a specific console position
+
+    :param x: Horizontal position
+    :type x: int
+    :param y: Vertical position
+    :type y: int
+    :param text: The string to print
+    :type text: str
+    """
+    put(f"{Cursor.POS(x, y)}{text}")
+
+
 def clear(console_size):
     """Clear the screen, and position the cursor at the top
 
@@ -17,4 +30,4 @@ def clear(console_size):
     :type console_size: tuple
     """
     put("\n" * console_size[1])
-    put(Cursor.POS(0, 0))
+    put_at(0, 0, "")

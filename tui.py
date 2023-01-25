@@ -6,7 +6,7 @@ from config import Config
 from input import UserInput, Command
 from list import List
 from task import Task
-from console import put, clear
+from console import put, clear, put_at
 
 
 class TUI:
@@ -131,7 +131,7 @@ class TUI:
                 put(f"{idx} {name} ({badge})\n")
 
         # Print the result message
-        put(f"{cls.last_result}\n")
+        put_at(0, cls.CONSOLE_SIZE[1] - 1, f"{cls.last_result}\n")
 
         # Print the sidebar
         put(f"{Cursor.POS(cls.CONSOLE_SIZE[0] - cls.SIDE_PANE_WIDTH, 0)}=== COMMANDS ===\n")
