@@ -105,24 +105,19 @@ class TUI:
         """
         clear(cls.CONSOLE_SIZE)
 
-        lines_printed = 0
-
         if cls.state == cls.State.HELP:
             # Print the header
             put("=== HELP ===\n")
             put("\n")
-            lines_printed += 2
             # Print help text
             for line in cls.help_text:
                 put(f"{line}\n")
-            lines_printed += len(cls.help_text)
 
         elif cls.state == cls.State.LIST_VIEW:
             # Print the header
             put("=== LISTS ===\n")
             put("\n")
 
-            lines_printed += 2
             # Print the lists
             for i in range(len(cls.lists)):
                 lst = cls.lists[i]
@@ -134,10 +129,6 @@ class TUI:
                 if done_count < task_count:
                     badge = f"{str(done_count)}/{str(task_count)}"
                 put(f"{idx} {name} ({badge})\n")
-            lines_printed += len(cls.lists)
-
-        # Print newlines until we're 2 lines away from the bottom
-        put("\n" * (cls.CONSOLE_SIZE[1] - lines_printed - 2))
 
         # Print the result message
         put(f"{cls.last_result}\n")
