@@ -1,6 +1,6 @@
 from enum import Enum, auto
 
-from colorama import just_fix_windows_console, Fore, Style
+from colorama import just_fix_windows_console, Fore, Style, Cursor
 
 from config import Config
 from input import UserInput, Command
@@ -22,6 +22,7 @@ class TUI:
         SHUTDOWN = auto()  # Shutdown requested
 
     CONSOLE_SIZE = (80, 25)  # (w,h) column/row count
+    SIDE_PANE_WIDTH = 12
     GENERAL_HELP = [
         "Lists is controlled with text commands. You can see the list of",
         "available commands in the pane on the right.",
@@ -111,32 +112,33 @@ class TUI:
             lines_printed += 2
             # Print help text
             for line in cls.help_text:
-                put(line + "\n")
+                put(f"{line}\n")
             lines_printed += len(cls.help_text)
 
         elif cls.state == cls.State.LIST_VIEW:
             # Print the header
             put("=== LISTS ===\n")
             put("\n")
+
             lines_printed += 2
             # Print the lists
             for i in range(len(cls.lists)):
                 lst = cls.lists[i]
-                idx = "#" + str(i)
+                idx = f"#{str(i)}"
                 name = lst.name
                 done_count = lst.count_done()
                 task_count = len(lst.tasks)
                 badge = "done!"
                 if done_count < task_count:
-                    badge = str(done_count) + "/" + str(task_count)
-                put(idx + " " + name + " (" + badge + ")\n")
+                    badge = f"{str(done_count)}/{str(task_count)}"
+                put(f"{idx} {name} ({badge})\n")
             lines_printed += len(cls.lists)
 
         # Print newlines until we're 2 lines away from the bottom
         put("\n" * (cls.CONSOLE_SIZE[1] - lines_printed - 2))
 
         # Print the result message
-        put(cls.last_result + "\n")
+        put(f"{cls.last_result}\n")
 
     @classmethod
     def _parse(cls, cmd):
