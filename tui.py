@@ -133,8 +133,13 @@ class TUI:
 
             # Print the sidebar
             sidebar_offset = cls.CONSOLE_SIZE[0] - cls.SIDE_PANE_WIDTH
-            put_at(sidebar_offset, 0, f"=== COMMANDS ===\n")
-            put(Cursor.POS(0, cls.CONSOLE_SIZE[1]))
+            y_pos = 0
+            put_at(sidebar_offset, y_pos, f"=== COMMANDS ===\n")
+            y_pos += 1
+            for command in cls._get_command_list():
+                for invocation in command.invocations():
+                    put_at(sidebar_offset, y_pos, f"{invocation}")
+                    y_pos += 1
 
         # Print the result message
         put_at(0, cls.CONSOLE_SIZE[1] - 2, f"{cls.last_result}\n")
