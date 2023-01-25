@@ -130,7 +130,7 @@ class TUI:
             # Print the lists
             for i in range(len(cls.lists)):
                 lst = cls.lists[i]
-                idx = f"#{str(i)}"
+                idx = f"#{str(i + 1)}"
                 name = lst.name
                 done_count = lst.count_done()
                 task_count = len(lst.tasks)
