@@ -24,8 +24,9 @@ class UserInput:
         :param cmd: Full string of text entered by the user
         :type cmd: str
         """
-        cmd = cmd.lower().strip()
+        cmd = cmd.strip()
         keyword, _, args = cmd.partition(" ")
+        keyword = keyword.lower()
         args = args.strip()
         index_arg, _, text_arg = args.partition(" ")
         text_arg = text_arg.strip()
