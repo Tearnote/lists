@@ -20,7 +20,7 @@ def put_at(x, y, text):
     :param text: The string to print
     :type text: str
     """
-    put(f"{Cursor.POS(x, y)}{text}")
+    put(f"{Cursor.POS(x + 1, y + 1)}{text}")
 
 
 def clear(console_size):
