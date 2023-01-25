@@ -95,6 +95,14 @@ class TUI:
             "no way to undo this operation."
         ], has_index_arg=True, index_arg_required=True)
         cls.list_view_commands.append(remove_command)
+        rename_command = Command("rename", cls._cmd_rename, [
+            f"Syntax: {Fore.GREEN}rename #{Style.RESET_ALL}",
+            "",
+            "Change the name of a list under the given index. The contents",
+            "of the list stay unchanged."
+        ], has_index_arg=True, index_arg_required=True, has_text_arg=True,
+                                 text_arg_required=True)
+        cls.list_view_commands.append(rename_command)
 
         # Set up test content
         Config.set("print_done_tasks", "yes")
@@ -326,3 +334,25 @@ class TUI:
         list_name = cls.lists[index].name
         cls.lists.pop(index)
         cls.last_result = f"List \"{list_name}\" removed."
+
+    @classmethod
+    def _cmd_rename(cls, *args):
+        """Rename a list
+
+        :param *args: Tuple of (index, text)
+        """
+        index = args[0] - 1
+
+        # Bound check
+        if index < 0 or index >= len(cls.lists):
+            cls.last_result = (
+                f"{Fore.RED}"
+                f"There is no list with index "
+                f"\"{args[0]}\"."
+                f"{Style.RESET_ALL}"
+            )
+            return
+
+        old_name = cls.lists[index].name
+        cls.lists[index].name = args[1]
+        cls.last_result = f"List \"{old_name}\" renamed to \"{args[1]}\"."
