@@ -139,6 +139,15 @@ class TUI:
         ], has_index_arg=True, index_arg_required=True, has_text_arg=True,
                                       text_arg_required=True)
         cls.task_view_commands.append(task_rename_command)
+        task_done_command = Command("done", cls._cmd_task_done, [
+            f"Syntax: {Fore.GREEN}done #{Style.RESET_ALL}",
+            "",
+            "Mark a task as done, or undo the mark to turn the task active",
+            "again. In the settings you can choose whether done tasks are",
+            "just greyed out, printed with replacement text,",
+            "or skipped entirely."
+        ], has_index_arg=True, index_arg_required=True)
+        cls.task_view_commands.append(task_done_command)
 
         # Set up test content
         Config.set("print_done_tasks", "yes")
@@ -480,3 +489,26 @@ class TUI:
         old_name = tasks[index].body
         tasks[index].body = args[1]
         cls.last_result = f"Task \"{old_name}\" renamed to \"{args[1]}\"."
+
+    @classmethod
+    def _cmd_task_done(cls, *args):
+        """Toggle a task's done status
+
+        :param *args: Tuple of (index, _)
+        """
+        tasks = cls.lists[cls.active_list].tasks
+        index = args[0] - 1
+
+        # Bound check
+        if index < 0 or index >= len(tasks):
+            cls.last_result = (
+                f"{Fore.RED}"
+                f"There is no task with index "
+                f"\"{args[0]}\"."
+                f"{Style.RESET_ALL}"
+            )
+            return
+
+        neg = "not " if tasks[index].done else ""
+        tasks[index].done = not tasks[index].done
+        cls.last_result = f"Task \"{tasks[index].body}\" marked as {neg}done."
