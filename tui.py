@@ -115,6 +115,13 @@ class TUI:
         ], has_index_arg=True, index_arg_required=True, has_text_arg=True,
                                       text_arg_required=True)
         cls.list_view_commands.append(list_rename_command)
+        task_add_command = Command("add", cls._cmd_task_add, [
+            f"Syntax: {Fore.GREEN}add #{Style.RESET_ALL}",
+            "",
+            "Add a task to the list. The task will be added at the end,",
+            "in an un-done state."
+        ], has_text_arg=True, text_arg_required=True)
+        cls.task_view_commands.append(task_add_command)
 
         # Set up test content
         Config.set("print_done_tasks", "yes")
@@ -401,3 +408,12 @@ class TUI:
         cls.active_list = index
         cls.last_result = f"Viewing list \"{cls.lists[index].name}\"."
         cls._change_state(cls.State.TASK_VIEW)
+
+    @classmethod
+    def _cmd_task_add(cls, *args):
+        """Add a new task to active list
+
+        :param *args: Tuple of (_, text)
+        """
+        cls.lists[cls.active_list].tasks.append(Task(args[1]))
+        cls.last_result = f"Task \"{args[1]}\" added."
