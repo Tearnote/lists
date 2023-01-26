@@ -55,8 +55,37 @@ class Config:
         :raises ValueError: The provided value is invalid for the field
         """
         field = cls._find_field(name)
+
+        # Value check
         if len(field.values) > 0 and field.values.count(value) == 0:
             raise ValueError
+
+        field.value = value
+
+    @classmethod
+    def set_at(cls, index, value):
+        """Set a config field by index
+
+        The index corresponds to numbers as shown in the print() output,
+        and is typically user-provided.
+
+        :param index: Field index
+        :type index: int
+        :param value: New value to set on the field
+        :type value: str
+        :raises IndexError: The provided index is out of range
+        :raises ValueError: The provided value is invalid for the field
+        """
+        # Bounds check
+        if index < 0 or index >= len(cls._fields):
+            raise IndexError
+
+        field = cls._fields[index]
+
+        # Value check
+        if len(field.values) > 0 and field.values.count(value) == 0:
+            raise ValueError
+
         field.value = value
 
     @classmethod
