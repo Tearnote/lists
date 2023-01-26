@@ -79,10 +79,6 @@ class Config:
 
         index -= 1
 
-        # Bounds check
-        if index < 0 or index >= len(cls._fields):
-            raise IndexError
-
         field = cls._fields[index]
 
         # Value check
