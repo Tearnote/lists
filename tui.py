@@ -3,7 +3,7 @@ from enum import Enum, auto
 from colorama import just_fix_windows_console, Fore, Style
 
 from config import Config
-from input import UserInput, Command
+from input import UserInput, Command, CommandList
 from list import List
 from notebook import Notebook
 from task import Task
@@ -51,9 +51,9 @@ class TUI:
     previous_state = State.NONE  # State "undo" support
     active_list = None  # Reference to currently viewed list in task view
 
-    list_view_commands = []  # Set of commands available in LIST_VIEW state
-    task_view_commands = []  # Set of commands available in TASK_VIEW state
-    settings_commands = []  # Set of commands available in SETTINGS state
+    list_view_commands = CommandList()  # Commands available in LIST_VIEW state
+    task_view_commands = CommandList()  # Commands available in TASK_VIEW state
+    settings_commands = CommandList()  # Commands available in SETTINGS state
 
     last_result = "Welcome to Lists."  # Feedback from the most recent command
     help_text = []  # List of lines shown on the screen in the help state
@@ -74,17 +74,17 @@ class TUI:
             "",
             "Leave the program immediately. All changes are saved."
         ])
-        cls.list_view_commands.append(exit_command)
-        cls.task_view_commands.append(exit_command)
-        cls.settings_commands.append(exit_command)
+        cls.list_view_commands.add(exit_command)
+        cls.task_view_commands.add(exit_command)
+        cls.settings_commands.add(exit_command)
         back_command = Command("back", cls._cmd_back, [
             f"Syntax: {Fore.GREEN}back{Style.RESET_ALL}",
             "",
             "Return to the previous screen. For example, in task view,",
             "it will bring you back to list view."
         ])
-        cls.task_view_commands.append(back_command)
-        cls.settings_commands.append(back_command)
+        cls.task_view_commands.add(back_command)
+        cls.settings_commands.add(back_command)
         help_command = Command("help", cls._cmd_help, [
             f"Syntax (1): {Fore.GREEN}help{Style.RESET_ALL}",
             f"Syntax (2): {Fore.GREEN}help ...{Style.RESET_ALL}",
@@ -97,9 +97,9 @@ class TUI:
             "example, in task view you won't be able to get help about",
             "list-specific commands."
         ], has_text_arg=True)
-        cls.list_view_commands.append(help_command)
-        cls.task_view_commands.append(help_command)
-        cls.settings_commands.append(help_command)
+        cls.list_view_commands.add(help_command)
+        cls.task_view_commands.add(help_command)
+        cls.settings_commands.add(help_command)
         settings_command = Command("settings", cls._cmd_settings, [
             f"Syntax: {Fore.GREEN}settings{Style.RESET_ALL}",
             "",
@@ -107,11 +107,11 @@ class TUI:
             "as well as storage credentials. All settings are",
             "automatically saved."
         ])
-        cls.list_view_commands.append(settings_command)
+        cls.list_view_commands.add(settings_command)
         list_enter_command = Command("", cls._cmd_list_enter, [],
                                      has_index_arg=True,
                                      index_arg_required=True)
-        cls.list_view_commands.append(list_enter_command)
+        cls.list_view_commands.add(list_enter_command)
         list_add_command = Command("add", cls._cmd_list_add, [
             f"Syntax: {Fore.GREEN}add ...{Style.RESET_ALL}",
             "",
@@ -119,7 +119,7 @@ class TUI:
             "the list, you will probably want to enter it with",
             "the \"#\" command (just the list index), and add some tasks to it."
         ], has_text_arg=True, text_arg_required=True)
-        cls.list_view_commands.append(list_add_command)
+        cls.list_view_commands.add(list_add_command)
         list_remove_command = Command("remove", cls._cmd_list_remove, [
             f"Syntax: {Fore.GREEN}remove #{Style.RESET_ALL}",
             "",
@@ -127,7 +127,7 @@ class TUI:
             "command, and always double-check the index - there is currently",
             "no way to undo this operation."
         ], has_index_arg=True, index_arg_required=True)
-        cls.list_view_commands.append(list_remove_command)
+        cls.list_view_commands.add(list_remove_command)
         list_rename_command = Command("rename", cls._cmd_list_rename, [
             f"Syntax: {Fore.GREEN}rename #{Style.RESET_ALL}",
             "",
@@ -135,14 +135,14 @@ class TUI:
             "of the list stay unchanged."
         ], has_index_arg=True, index_arg_required=True, has_text_arg=True,
                                       text_arg_required=True)
-        cls.list_view_commands.append(list_rename_command)
+        cls.list_view_commands.add(list_rename_command)
         task_add_command = Command("add", cls._cmd_task_add, [
             f"Syntax: {Fore.GREEN}add #{Style.RESET_ALL}",
             "",
             "Add a task to the list. The task will be added at the end,",
             "in an un-done state."
         ], has_text_arg=True, text_arg_required=True)
-        cls.task_view_commands.append(task_add_command)
+        cls.task_view_commands.add(task_add_command)
         task_remove_command = Command("remove", cls._cmd_task_remove, [
             f"Syntax: {Fore.GREEN}remove #{Style.RESET_ALL}",
             "",
@@ -151,7 +151,7 @@ class TUI:
             "no way to undo this operation. Consider marking the task as done",
             "instead."
         ], has_index_arg=True, index_arg_required=True)
-        cls.task_view_commands.append(task_remove_command)
+        cls.task_view_commands.add(task_remove_command)
         task_rename_command = Command("rename", cls._cmd_task_rename, [
             f"Syntax: {Fore.GREEN}rename #{Style.RESET_ALL}",
             "",
@@ -159,7 +159,7 @@ class TUI:
             "as done or priority, only the text will change."
         ], has_index_arg=True, index_arg_required=True, has_text_arg=True,
                                       text_arg_required=True)
-        cls.task_view_commands.append(task_rename_command)
+        cls.task_view_commands.add(task_rename_command)
         task_done_command = Command("done", cls._cmd_task_done, [
             f"Syntax: {Fore.GREEN}done #{Style.RESET_ALL}",
             "",
@@ -168,7 +168,7 @@ class TUI:
             "just greyed out, printed with replacement text,",
             "or skipped entirely."
         ], has_index_arg=True, index_arg_required=True)
-        cls.task_view_commands.append(task_done_command)
+        cls.task_view_commands.add(task_done_command)
         task_prio_command = Command("prio", cls._cmd_task_prio, [
             f"Syntax: {Fore.GREEN}prio #{Style.RESET_ALL}",
             "",
@@ -177,7 +177,7 @@ class TUI:
             "printed with a color accent. It has no effect on tasks marked",
             "as done."
         ], has_index_arg=True, index_arg_required=True)
-        cls.task_view_commands.append(task_prio_command)
+        cls.task_view_commands.add(task_prio_command)
         settings_set_command = Command("set", cls._cmd_settings_set, [
             f"Syntax: {Fore.GREEN}set # ...",
             "",
@@ -186,7 +186,7 @@ class TUI:
             "the value must match one of them."
         ], has_index_arg=True, index_arg_required=True, has_text_arg=True,
                                        text_arg_required=True)
-        cls.settings_commands.append(settings_set_command)
+        cls.settings_commands.add(settings_set_command)
 
         # Set up test content
         Config.set("print_done_tasks", "yes")
@@ -252,10 +252,10 @@ class TUI:
             y_pos = 0
             put_at(sidebar_offset, y_pos, f" === COMMANDS ===\n")
             y_pos += 1
-            for command in cls._get_command_list():
-                for invocation in command.invocations():
-                    put_at(sidebar_offset, y_pos, f"| {invocation}\n")
-                    y_pos += 1
+            invocations = str(cls._get_command_list()).split("\n")
+            for invocation in invocations:
+                put_at(sidebar_offset, y_pos, f"| {invocation}\n")
+                y_pos += 1
 
         # Print the result message
         put_at(0, cls.CONSOLE_SIZE[1] - 2, f"{cls.last_result}\n")
@@ -281,25 +281,20 @@ class TUI:
         # Command parsing and execution
         user_input = UserInput.parse(cmd)
         try:
-            command = cls._find_command(user_input.keyword)
+            command_list = cls._get_command_list()
+            command = command_list.find(user_input.keyword)
             command.validate_and_run(user_input)
 
-        except (IndexError, ValueError, TypeError) as e:
+        except (IndexError, ValueError, TypeError,
+                CommandList.CommandNameError) as e:
             cls.last_result = f"{Fore.RED}{e}{Style.RESET_ALL}"
-
-        except StopIteration:  # Command not found in list
-            cls.last_result = (
-                f"{Fore.RED}"
-                f"Unknown command "
-                f"\"{user_input.keyword}\""
-                f"{Style.RESET_ALL}")
 
     @classmethod
     def _get_command_list(cls):
         """Return the current state's command list
 
         :return: list of currently applicable :class:`Command`s
-        :rtype: list
+        :rtype: :class:`CommandList`
         """
         if cls.state == cls.State.LIST_VIEW:
             return cls.list_view_commands
@@ -307,20 +302,7 @@ class TUI:
             return cls.task_view_commands
         if cls.state == cls.State.SETTINGS:
             return cls.settings_commands
-        raise AssertionError  # This should be unreachable
-
-    @classmethod
-    def _find_command(cls, keyword):
-        """Return a command from the currently available state
-
-        :param keyword: Name of the commend
-        :type keyword: str
-        :return: Found command object
-        :rtype: :class:`Command`
-        :raises StopIteration: Command couldn't be found
-        """
-        command_list = cls._get_command_list()
-        return next(filter(lambda c: c.keyword == keyword, command_list))
+        raise RuntimeError  # This should be unreachable
 
     @classmethod
     def _change_state(cls, new_state):
@@ -362,20 +344,16 @@ class TUI:
         _, text = args
         if text != "":  # Command-specific help
             try:
-                command = cls._find_command(text)
+                command = cls._get_command_list().find(text)
                 cls.help_text = command.help_text
                 cls.last_result = (
                     f"Help for command "
                     f"\"{text}\""
                     f" displayed. Input anything to return.")
                 cls._change_state(cls.State.HELP)
-            except StopIteration:
-                cls.last_result = (
-                    f"{Fore.RED}"
-                    f"Help for command "
-                    f"\"{text}\""
-                    f" not found"
-                    f"{Style.RESET_ALL}"
+            except CommandList.CommandNameError:
+                raise CommandList.CommandNameError(
+                    f"Help for command \"{text}\" not found"
                 )
 
         else:  # General help

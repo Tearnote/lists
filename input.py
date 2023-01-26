@@ -138,3 +138,55 @@ class Command:
                 raise TypeError(f"Index value \"{index}\" is not valid")
 
         self.callback(index_int, text)
+
+
+class CommandList:
+    """Represents all commands that are available in a single state
+    """
+
+    class CommandNameError(ValueError):
+        """Command name doesn't exist in the list
+        """
+        pass
+
+    def __init__(self):
+        """Constructor method
+        """
+        self._commands = []
+
+    def __str__(self):
+        """Return a list of all command invocations in the list
+
+        :return: Multi-line string of command invocations
+        :rtype: str
+        """
+        result = ""
+        for i in range(len(self._commands)):
+            command = self._commands[i]
+            for invocation in command.invocations():
+                if i > 0:
+                    result += "\n"
+                result += f"{invocation}"
+        return result
+
+    def add(self, command):
+        """Add a command to the list
+
+        :param command: The command to add
+        :type command: :class:`Command`
+        """
+        self._commands.append(command)
+
+    def find(self, name):
+        """Return the command with the given name
+
+        :param name: Command name to search for
+        :type name: str
+        :raises CommandList.CommandNameError: Command not found
+        :return: Reference to the found command
+        :rtype: :class:`Command`
+        """
+        try:
+            return next(filter(lambda c: c.keyword == name, self._commands))
+        except StopIteration:
+            raise self.CommandNameError(f"Unknown command \"{name}\"")
