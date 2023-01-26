@@ -86,6 +86,7 @@ class Config:
                 values_text += f" {Fore.LIGHTBLACK_EX}["
                 values_text += ", ".join(field.values)
                 values_text += f"]{Style.RESET_ALL}"
-            result += f"#{index} {field.description}: {field.value}"
+            value = f"{Fore.GREEN}{field.value}{Style.RESET_ALL}"
+            result += f"#{index} {field.description}: {value}"
             result += f"{values_text}\n"
         return result
