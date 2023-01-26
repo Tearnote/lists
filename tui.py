@@ -158,7 +158,7 @@ class TUI:
             # Print the lists
             for i in range(len(cls.lists)):
                 lst = cls.lists[i]
-                idx = f"#{str(i + 1)}"
+                idx = f"#{i + 1}"
                 name = lst.name
                 done_count = lst.count_done()
                 task_count = len(lst.tasks)
@@ -166,7 +166,7 @@ class TUI:
                 if task_count == 0:
                     badge = "empty"
                 else:
-                    badge = f"{str(done_count)}/{str(task_count)}"
+                    badge = f"{done_count}/{task_count}"
                     if done_count == task_count:
                         badge += ", done!"
                 put(f"{idx} {name} ({badge})\n")
