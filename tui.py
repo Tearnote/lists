@@ -87,34 +87,34 @@ class TUI:
         ], has_text_arg=True)
         cls.list_view_commands.append(help_command)
         cls.task_view_commands.append(help_command)
-        add_command = Command("add", cls._cmd_add, [
+        list_add_command = Command("add", cls._cmd_list_add, [
             f"Syntax: {Fore.GREEN}add ...{Style.RESET_ALL}",
             "",
             "Add a new empty list with the provided name. After adding",
             "the list, you will probably want to enter it with",
             "the \"#\" command (just the list index), and add some tasks to it."
         ], has_text_arg=True, text_arg_required=True)
-        enter_command = Command("", cls._cmd_enter, [],  # Help cannot be viewed
+        cls.list_view_commands.append(list_add_command)
+        list_enter_command = Command("", cls._cmd_list_enter, [],  # Help cannot be viewed
                                 has_index_arg=True,
                                 index_arg_required=True)
-        cls.list_view_commands.append(enter_command)
-        cls.list_view_commands.append(add_command)
-        remove_command = Command("remove", cls._cmd_remove, [
+        cls.list_view_commands.append(list_enter_command)
+        list_remove_command = Command("remove", cls._cmd_list_remove, [
             f"Syntax: {Fore.GREEN}remove #{Style.RESET_ALL}",
             "",
             "Remove the list under the given index. Be very careful with this",
             "command, and always double-check the index - there is currently",
             "no way to undo this operation."
         ], has_index_arg=True, index_arg_required=True)
-        cls.list_view_commands.append(remove_command)
-        rename_command = Command("rename", cls._cmd_rename, [
+        cls.list_view_commands.append(list_remove_command)
+        list_rename_command = Command("rename", cls._cmd_list_rename, [
             f"Syntax: {Fore.GREEN}rename #{Style.RESET_ALL}",
             "",
             "Change the name of a list under the given index. The contents",
             "of the list stay unchanged."
         ], has_index_arg=True, index_arg_required=True, has_text_arg=True,
                                  text_arg_required=True)
-        cls.list_view_commands.append(rename_command)
+        cls.list_view_commands.append(list_rename_command)
 
         # Set up test content
         Config.set("print_done_tasks", "yes")
@@ -329,7 +329,7 @@ class TUI:
             cls._change_state(cls.State.HELP)
 
     @classmethod
-    def _cmd_add(cls, *args):
+    def _cmd_list_add(cls, *args):
         """Add a new list
 
         :param *args: Tuple of (_, text)
@@ -338,7 +338,7 @@ class TUI:
         cls.last_result = f"List \"{args[1]}\" added."
 
     @classmethod
-    def _cmd_remove(cls, *args):
+    def _cmd_list_remove(cls, *args):
         """Remove a list
 
         :param *args: Tuple of (index, _)
@@ -360,7 +360,7 @@ class TUI:
         cls.last_result = f"List \"{list_name}\" removed."
 
     @classmethod
-    def _cmd_rename(cls, *args):
+    def _cmd_list_rename(cls, *args):
         """Rename a list
 
         :param *args: Tuple of (index, text)
@@ -382,7 +382,7 @@ class TUI:
         cls.last_result = f"List \"{old_name}\" renamed to \"{args[1]}\"."
 
     @classmethod
-    def _cmd_enter(cls, *args):
+    def _cmd_list_enter(cls, *args):
         """Enter a list
 
         :param *args: Tuple of (index, _)
