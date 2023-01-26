@@ -150,7 +150,7 @@ class TUI:
             for line in cls.help_text:
                 put(f"{line}\n")
 
-        elif cls.state == cls.State.LIST_VIEW:
+        if cls.state == cls.State.LIST_VIEW:
             # Print the header
             put_at(0, 0, "=== LISTS ===\n")
             put("\n")
@@ -171,6 +171,15 @@ class TUI:
                         badge += ", done!"
                 put(f"{idx} {name} ({badge})\n")
 
+        if cls.state == cls.State.TASK_VIEW:
+            # Print the header
+            put_at(0, 0, "=== TASKS ===\n")
+            put("\n")
+
+            # Print the tasks
+            put(cls.lists[cls.active_list])
+
+        if cls.state == cls.State.LIST_VIEW or cls.state == cls.State.TASK_VIEW:
             # Print the sidebar
             sidebar_offset = cls.CONSOLE_SIZE[0] - cls.SIDE_PANE_WIDTH - 1
             y_pos = 0
@@ -246,6 +255,8 @@ class TUI:
         """
         if cls.state == cls.State.LIST_VIEW:
             return cls.list_view_commands
+        if cls.state == cls.State.TASK_VIEW:
+            return cls.task_view_commands
         raise AssertionError  # This should be unreachable
 
     @classmethod
