@@ -61,21 +61,6 @@ class Command:
     :type text_arg_required: bool, optional
     """
 
-    class MissingArgument(ValueError):
-        """User didn't provide the required arguments
-        """
-        pass
-
-    class TooManyArguments(ValueError):
-        """User provided an extraneous argument
-        """
-        pass
-
-    class InvalidIndex(ValueError):
-        """User-provided index cannot be converted to int
-        """
-        pass
-
     def __init__(self, keyword, callback, help_text,
                  has_index_arg=False, index_arg_required=False,
                  has_text_arg=False, text_arg_required=False):
@@ -135,14 +120,16 @@ class Command:
             text = user_input.text_arg
 
         # Validate params
-        if self.index_arg_required and index == "":
-            raise self.MissingArgument
-        if self.text_arg_required and text == "":
-            raise self.MissingArgument
-        if not self.has_index_arg and index != "":
-            raise self.TooManyArguments
-        if not self.has_text_arg and text != "":
-            raise self.TooManyArguments
+        if (self.index_arg_required and index == "") or (
+                self.text_arg_required and text == ""):
+            raise ValueError(
+                f"Not enough arguments provided for command \"{self.keyword}\""
+            )
+        if (not self.has_index_arg and index != "") or (
+                not self.has_text_arg and text != ""):
+            raise ValueError(
+                f"Too many arguments provided for command \"{self.keyword}\""
+            )
 
         # Convert index to integer
         index_int = -1
@@ -150,6 +137,6 @@ class Command:
             try:
                 index_int = int(index)
             except ValueError:
-                raise self.InvalidIndex
+                raise IndexError(f"Index value \"{index}\" is not valid")
 
         self.callback(index_int, text)

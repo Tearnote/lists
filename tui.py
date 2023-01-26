@@ -284,7 +284,7 @@ class TUI:
             command = cls._find_command(user_input.keyword)
             command.validate_and_run(user_input)
 
-        except IndexError as e:
+        except (IndexError, ValueError) as e:
             cls.last_result = f"{Fore.RED}{e}{Style.RESET_ALL}"
 
         except StopIteration:  # Command not found in list
@@ -292,28 +292,6 @@ class TUI:
                 f"{Fore.RED}"
                 f"Unknown command "
                 f"\"{user_input.keyword}\""
-                f"{Style.RESET_ALL}")
-
-        except Command.MissingArgument:
-            cls.last_result = (
-                f"{Fore.RED}"
-                f"Not enough arguments provided for command "
-                f"\"{user_input.keyword}\""
-                f"{Style.RESET_ALL}")
-
-        except Command.TooManyArguments:
-            cls.last_result = (
-                f"{Fore.RED}"
-                f"Too many arguments provided for command "
-                f"\"{user_input.keyword}\""
-                f"{Style.RESET_ALL}")
-
-        except Command.InvalidIndex:
-            cls.last_result = (
-                f"{Fore.RED}"
-                f"Index value "
-                f"\"{user_input.index_arg}\" "
-                f"is not valid"
                 f"{Style.RESET_ALL}")
 
     @classmethod
