@@ -177,6 +177,15 @@ class TUI:
             "as done."
         ], has_index_arg=True, index_arg_required=True)
         cls.task_view_commands.append(task_prio_command)
+        settings_set_command = Command("set", cls._cmd_settings_set, [
+            f"Syntax: {Fore.GREEN}set # ...",
+            "",
+            "Change a setting under the provided index to a different value.",
+            "If a list of values is show to the right of the setting,",
+            "the value must match one of them."
+        ], has_index_arg=True, index_arg_required=True, has_text_arg=True,
+                                       text_arg_required=True)
+        cls.settings_commands.append(settings_set_command)
 
         # Set up test content
         Config.set("print_done_tasks", "yes")
@@ -589,3 +598,12 @@ class TUI:
 
         cls.last_result = "Settings displayed."
         cls._change_state(cls.State.SETTINGS)
+
+    @classmethod
+    def _cmd_settings_set(cls, *args):
+        """Change a setting value
+
+        :param *args: Tuple of (index, value)
+        """
+        Config.set_at(args[0], args[1])
+        cls.last_result = f"Setting \"{2}\" changed to \"{args[1]}\"."
