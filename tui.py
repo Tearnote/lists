@@ -5,6 +5,7 @@ from colorama import just_fix_windows_console, Fore, Style
 from config import Config
 from input import UserInput, Command
 from list import List
+from notebook import Notebook
 from task import Task
 from console import put, clear, put_at
 
@@ -48,6 +49,7 @@ class TUI:
 
     state = State.NONE  # Current view of the global state machine
     previous_state = State.NONE  # State "undo" support
+    active_list = 0  # Currently viewed list in task view
 
     list_view_commands = []  # Set of commands available in LIST_VIEW state
     task_view_commands = []  # Set of commands available in TASK_VIEW state
@@ -56,8 +58,7 @@ class TUI:
     last_result = "Welcome to Lists."  # Feedback from the most recent command
     help_text = []  # List of lines shown on the screen in the help state
 
-    lists = []  # All to-do lists owned by the user
-    active_list = 0  # Currently viewed list in task view
+    notebook = Notebook()  # All to-do lists owned by the user
 
     @classmethod
     def run(cls):
@@ -189,8 +190,8 @@ class TUI:
 
         # Set up test content
         Config.set("print_done_tasks", "yes")
-        cls.lists.append(List("Main"))
-        test_list = cls.lists[0]
+        cls.notebook.lists.append(List("Main"))
+        test_list = cls.notebook.lists[0]
         test_list.tasks.append(Task("Hello world!"))
         test_list.tasks.append(Task("How are you?"))
         test_list.tasks.append(Task("I'm fine, thanks"))
@@ -228,8 +229,8 @@ class TUI:
             put("\n")
 
             # Print the lists
-            for i in range(len(cls.lists)):
-                lst = cls.lists[i]
+            for i in range(len(cls.notebook.lists)):
+                lst = cls.notebook.lists[i]
                 idx = f"#{i + 1}"
                 name = lst.name
                 done_count = lst.count_done()
@@ -254,7 +255,7 @@ class TUI:
             put("\n")
 
             # Print the tasks
-            put(cls.lists[cls.active_list])
+            put(cls.notebook.lists[cls.active_list])
 
         if (
                 cls.state == cls.State.LIST_VIEW or
@@ -421,7 +422,7 @@ class TUI:
 
         :param *args: Tuple of (_, text)
         """
-        cls.lists.append(List(args[1]))
+        cls.notebook.lists.append(List(args[1]))
         cls.last_result = f"List \"{args[1]}\" added."
 
     @classmethod
@@ -433,7 +434,7 @@ class TUI:
         index = args[0] - 1
 
         # Bound check
-        if index < 0 or index >= len(cls.lists):
+        if index < 0 or index >= len(cls.notebook.lists):
             cls.last_result = (
                 f"{Fore.RED}"
                 f"There is no list with index "
@@ -442,8 +443,8 @@ class TUI:
             )
             return
 
-        list_name = cls.lists[index].name
-        cls.lists.pop(index)
+        list_name = cls.notebook.lists[index].name
+        cls.notebook.lists.pop(index)
         cls.last_result = f"List \"{list_name}\" removed."
 
     @classmethod
@@ -455,7 +456,7 @@ class TUI:
         index = args[0] - 1
 
         # Bound check
-        if index < 0 or index >= len(cls.lists):
+        if index < 0 or index >= len(cls.notebook.lists):
             cls.last_result = (
                 f"{Fore.RED}"
                 f"There is no list with index "
@@ -464,8 +465,8 @@ class TUI:
             )
             return
 
-        old_name = cls.lists[index].name
-        cls.lists[index].name = args[1]
+        old_name = cls.notebook.lists[index].name
+        cls.notebook.lists[index].name = args[1]
         cls.last_result = f"List \"{old_name}\" renamed to \"{args[1]}\"."
 
     @classmethod
@@ -477,7 +478,7 @@ class TUI:
         index = args[0] - 1
 
         # Bound check
-        if index < 0 or index >= len(cls.lists):
+        if index < 0 or index >= len(cls.notebook.lists):
             cls.last_result = (
                 f"{Fore.RED}"
                 f"There is no list with index "
@@ -487,7 +488,7 @@ class TUI:
             return
 
         cls.active_list = index
-        cls.last_result = f"Viewing list \"{cls.lists[index].name}\"."
+        cls.last_result = f"Viewing list \"{cls.notebook.lists[index].name}\"."
         cls._change_state(cls.State.TASK_VIEW)
 
     @classmethod
@@ -496,7 +497,7 @@ class TUI:
 
         :param *args: Tuple of (_, text)
         """
-        cls.lists[cls.active_list].tasks.append(Task(args[1]))
+        cls.notebook.lists[cls.active_list].tasks.append(Task(args[1]))
         cls.last_result = f"Task \"{args[1]}\" added."
 
     @classmethod
@@ -505,7 +506,7 @@ class TUI:
 
         :param *args: Tuple of (index, _)
         """
-        tasks = cls.lists[cls.active_list].tasks
+        tasks = cls.notebook.lists[cls.active_list].tasks
         index = args[0] - 1
 
         # Bound check
@@ -528,7 +529,7 @@ class TUI:
 
         :param *args: Tuple of (index, text)
         """
-        tasks = cls.lists[cls.active_list].tasks
+        tasks = cls.notebook.lists[cls.active_list].tasks
         index = args[0] - 1
 
         # Bound check
@@ -551,7 +552,7 @@ class TUI:
 
         :param *args: Tuple of (index, _)
         """
-        tasks = cls.lists[cls.active_list].tasks
+        tasks = cls.notebook.lists[cls.active_list].tasks
         index = args[0] - 1
 
         # Bound check
@@ -574,7 +575,7 @@ class TUI:
 
         :param *args: Tuple of (index, _)
         """
-        tasks = cls.lists[cls.active_list].tasks
+        tasks = cls.notebook.lists[cls.active_list].tasks
         index = args[0] - 1
 
         # Bound check
