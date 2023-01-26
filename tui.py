@@ -20,6 +20,7 @@ class TUI:
         HELP = auto()  # Help screen
         LIST_VIEW = auto()  # Displaying list overview
         TASK_VIEW = auto()  # Displaying entries of a single list
+        SETTINGS = auto()  # Program configuration
         SHUTDOWN = auto()  # Shutdown requested
 
     CONSOLE_SIZE = (80, 24)  # (w,h) column/row count
@@ -50,6 +51,7 @@ class TUI:
 
     list_view_commands = []  # Set of commands available in LIST_VIEW state
     task_view_commands = []  # Set of commands available in TASK_VIEW state
+    settings_commands = []  # Set of commands available in SETTINGS state
 
     last_result = "Welcome to Lists."  # Feedback from the most recent command
     help_text = []  # List of lines shown on the screen in the help state
@@ -73,6 +75,7 @@ class TUI:
         ])
         cls.list_view_commands.append(exit_command)
         cls.task_view_commands.append(exit_command)
+        cls.settings_commands.append(exit_command)
         back_command = Command("back", cls._cmd_back, [
             f"Syntax: {Fore.GREEN}back{Style.RESET_ALL}",
             "",
@@ -80,6 +83,7 @@ class TUI:
             "it will bring you back to list view."
         ])
         cls.task_view_commands.append(back_command)
+        cls.settings_commands.append(back_command)
         help_command = Command("help", cls._cmd_help, [
             f"Syntax (1): {Fore.GREEN}help{Style.RESET_ALL}",
             f"Syntax (2): {Fore.GREEN}help ...{Style.RESET_ALL}",
@@ -94,6 +98,19 @@ class TUI:
         ], has_text_arg=True)
         cls.list_view_commands.append(help_command)
         cls.task_view_commands.append(help_command)
+        cls.settings_commands.append(help_command)
+        settings_command = Command("settings", cls._cmd_settings, [
+            f"Syntax: {Fore.GREEN}settings{Style.RESET_ALL}",
+            "",
+            "Enter the settings. Here you can change some program behavior,",
+            "as well as storage credentials. All settings are",
+            "automatically saved."
+        ])
+        cls.list_view_commands.append(settings_command)
+        list_enter_command = Command("", cls._cmd_list_enter, [],
+                                     has_index_arg=True,
+                                     index_arg_required=True)
+        cls.list_view_commands.append(list_enter_command)
         list_add_command = Command("add", cls._cmd_list_add, [
             f"Syntax: {Fore.GREEN}add ...{Style.RESET_ALL}",
             "",
@@ -102,10 +119,6 @@ class TUI:
             "the \"#\" command (just the list index), and add some tasks to it."
         ], has_text_arg=True, text_arg_required=True)
         cls.list_view_commands.append(list_add_command)
-        list_enter_command = Command("", cls._cmd_list_enter, [],
-                                     has_index_arg=True,
-                                     index_arg_required=True)
-        cls.list_view_commands.append(list_enter_command)
         list_remove_command = Command("remove", cls._cmd_list_remove, [
             f"Syntax: {Fore.GREEN}remove #{Style.RESET_ALL}",
             "",
@@ -306,6 +319,8 @@ class TUI:
             return cls.list_view_commands
         if cls.state == cls.State.TASK_VIEW:
             return cls.task_view_commands
+        if cls.state == cls.State.SETTINGS:
+            return cls.settings_commands
         raise AssertionError  # This should be unreachable
 
     @classmethod
@@ -557,3 +572,11 @@ class TUI:
         neg = "not " if tasks[index].prio else ""
         tasks[index].prio = not tasks[index].prio
         cls.last_result = f"Task \"{tasks[index].body}\" marked as {neg}priority."
+
+    @classmethod
+    def _cmd_settings(cls, *_):
+        """Switch to settings state
+        """
+
+        cls.last_result = "Settings displayed."
+        cls._change_state(cls.State.SETTINGS)
