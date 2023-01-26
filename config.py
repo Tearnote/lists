@@ -76,6 +76,9 @@ class Config:
         :raises IndexError: The provided index is out of range
         :raises ValueError: The provided value is invalid for the field
         """
+
+        index -= 1
+
         # Bounds check
         if index < 0 or index >= len(cls._fields):
             raise IndexError
