@@ -19,6 +19,7 @@ class TUI:
         NONE = 0  # Initial state
         HELP = auto()  # Help screen
         LIST_VIEW = auto()  # Displaying list overview
+        TASK_VIEW = auto()  # Displaying entries of a single list
         SHUTDOWN = auto()  # Shutdown requested
 
     CONSOLE_SIZE = (80, 24)  # (w,h) column/row count
@@ -46,10 +47,15 @@ class TUI:
 
     state = State.NONE  # Current view of the global state machine
     previous_state = State.NONE  # State "undo" support
+
+    list_view_commands = []  # Set of commands available in LIST_VIEW state
+    task_view_commands = []  # Set of commands available in TASK_VIEW state
+
     last_result = "Welcome to Lists."  # Feedback from the most recent command
     help_text = []  # List of lines shown on the screen in the help state
+
     lists = []  # All to-do lists owned by the user
-    list_view_commands = []  # Set of commands available in LIST_VIEW state
+    active_list = 0  # Currently viewed list in task view
 
     @classmethod
     def run(cls):
@@ -66,6 +72,7 @@ class TUI:
             "Leave the program immediately. All changes are saved."
         ])
         cls.list_view_commands.append(exit_command)
+        cls.task_view_commands.append(exit_command)
         help_command = Command("help", cls._cmd_help, [
             f"Syntax (1): {Fore.GREEN}help{Style.RESET_ALL}",
             f"Syntax (2): {Fore.GREEN}help ...{Style.RESET_ALL}",
@@ -79,6 +86,7 @@ class TUI:
             "list-specific commands."
         ], has_text_arg=True)
         cls.list_view_commands.append(help_command)
+        cls.task_view_commands.append(help_command)
         add_command = Command("add", cls._cmd_add, [
             f"Syntax: {Fore.GREEN}add ...{Style.RESET_ALL}",
             "",
@@ -86,6 +94,10 @@ class TUI:
             "the list, you will probably want to enter it with",
             "the \"#\" command (just the list index), and add some tasks to it."
         ], has_text_arg=True, text_arg_required=True)
+        enter_command = Command("", cls._cmd_enter, [],  # Help cannot be viewed
+                                has_index_arg=True,
+                                index_arg_required=True)
+        cls.list_view_commands.append(enter_command)
         cls.list_view_commands.append(add_command)
         remove_command = Command("remove", cls._cmd_remove, [
             f"Syntax: {Fore.GREEN}remove #{Style.RESET_ALL}",
@@ -356,3 +368,25 @@ class TUI:
         old_name = cls.lists[index].name
         cls.lists[index].name = args[1]
         cls.last_result = f"List \"{old_name}\" renamed to \"{args[1]}\"."
+
+    @classmethod
+    def _cmd_enter(cls, *args):
+        """Enter a list
+
+        :param *args: Tuple of (index, _)
+        """
+        index = args[0] - 1
+
+        # Bound check
+        if index < 0 or index >= len(cls.lists):
+            cls.last_result = (
+                f"{Fore.RED}"
+                f"There is no list with index "
+                f"\"{args[0]}\"."
+                f"{Style.RESET_ALL}"
+            )
+            return
+
+        cls.active_list = index
+        cls.last_result = f"Viewing list \"{cls.lists[index].name}\"."
+        cls._change_state(cls.State.TASK_VIEW)
