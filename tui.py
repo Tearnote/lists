@@ -73,6 +73,13 @@ class TUI:
         ])
         cls.list_view_commands.append(exit_command)
         cls.task_view_commands.append(exit_command)
+        back_command = Command("back", cls._cmd_back, [
+            f"Syntax: {Fore.GREEN}back{Style.RESET_ALL}",
+            "",
+            "Return to the previous screen. For example, in task view,",
+            "it will bring you back to list view."
+        ])
+        cls.task_view_commands.append(back_command)
         help_command = Command("help", cls._cmd_help, [
             f"Syntax (1): {Fore.GREEN}help{Style.RESET_ALL}",
             f"Syntax (2): {Fore.GREEN}help ...{Style.RESET_ALL}",
@@ -338,6 +345,12 @@ class TUI:
         """
         cls._change_state(cls.State.SHUTDOWN)
         put("Goodbye!\n")
+
+    @classmethod
+    def _cmd_back(cls, *_):
+        """Return to the previous screen
+        """
+        cls._undo_state()
 
     @classmethod
     def _cmd_help(cls, *args):
