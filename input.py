@@ -30,6 +30,13 @@ class UserInput:
         args = args.strip()
         index_arg, _, text_arg = args.partition(" ")
         text_arg = text_arg.strip()
+
+        # Special case - index-only command
+        if args == "" and keyword.isdecimal():
+            args = keyword
+            index_arg = keyword
+            keyword = ""
+
         return cls(keyword, args, index_arg, text_arg)
 
 
@@ -88,6 +95,10 @@ class Command:
         :return: A list of strings that represent command invocations
         :rtype: list
         """
+        # Special case - index-only
+        if self.keyword == "" and self.has_index_arg:
+            return ["#"]
+
         result = []
         if not self.index_arg_required and not self.text_arg_required:
             result.append(f"{self.keyword}")
