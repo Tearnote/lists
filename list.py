@@ -1,6 +1,6 @@
 from functools import reduce
 
-from colorama import Fore
+from colorama import Fore, Style
 
 from config import Config
 
@@ -35,11 +35,10 @@ class List:
             task = self.tasks[i]
             if Config.get("print_done_tasks") == "no" and task.done:
                 continue
-            if not task.done:
-                result += Fore.LIGHTWHITE_EX
-            else:
-                result += Fore.LIGHTBLACK_EX
-            result += "#" + str(i + 1) + " " + str(task) + "\n"
+            color = ""
+            if task.done:
+                color = Fore.LIGHTBLACK_EX
+            result += f"{color}#{i + 1} {task}{Style.RESET_ALL}\n"
 
         return result
 
