@@ -148,6 +148,15 @@ class TUI:
             "or skipped entirely."
         ], has_index_arg=True, index_arg_required=True)
         cls.task_view_commands.append(task_done_command)
+        task_prio_command = Command("prio", cls._cmd_task_prio, [
+            f"Syntax: {Fore.GREEN}prio #{Style.RESET_ALL}",
+            "",
+            "Mark a task as priority, or undo the mark to restore normal",
+            "priority. This change is purely visual - priority tasks are",
+            "printed with a color accent. It has no effect on tasks marked",
+            "as done."
+        ], has_index_arg=True, index_arg_required=True)
+        cls.task_view_commands.append(task_prio_command)
 
         # Set up test content
         Config.set("print_done_tasks", "yes")
@@ -512,3 +521,26 @@ class TUI:
         neg = "not " if tasks[index].done else ""
         tasks[index].done = not tasks[index].done
         cls.last_result = f"Task \"{tasks[index].body}\" marked as {neg}done."
+
+    @classmethod
+    def _cmd_task_prio(cls, *args):
+        """Toggle a task's prio status
+
+        :param *args: Tuple of (index, _)
+        """
+        tasks = cls.lists[cls.active_list].tasks
+        index = args[0] - 1
+
+        # Bound check
+        if index < 0 or index >= len(tasks):
+            cls.last_result = (
+                f"{Fore.RED}"
+                f"There is no task with index "
+                f"\"{args[0]}\"."
+                f"{Style.RESET_ALL}"
+            )
+            return
+
+        neg = "not " if tasks[index].prio else ""
+        tasks[index].prio = not tasks[index].prio
+        cls.last_result = f"Task \"{tasks[index].body}\" marked as {neg}priority."
