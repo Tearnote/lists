@@ -8,13 +8,16 @@ class Task:
     :type body: str
     :param done: `True` if the task is marked as completed, defaults to `False`
     :type done: bool, optional
+    :param prio: `True` if the task is marked as priority, defaults to `False`
+    :type prio: bool, optional
     """
 
-    def __init__(self, body, done=False):
+    def __init__(self, body, done=False, prio=False):
         """Constructor method
         """
         self.body = body
         self.done = done
+        self.prio = prio
 
     def __str__(self):
         """Make tasks printable

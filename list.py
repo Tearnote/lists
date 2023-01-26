@@ -38,6 +38,8 @@ class List:
             color = ""
             if task.done:
                 color = Fore.LIGHTBLACK_EX
+            elif task.prio:
+                color = Fore.LIGHTWHITE_EX
             result += f"{color}#{i + 1} {task}{Style.RESET_ALL}\n"
 
         return result

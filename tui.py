@@ -126,6 +126,7 @@ class TUI:
         test_list.tasks.append(Task("The weather is horrible"))
         test_list.tasks.append(Task("It's freezing and wet"))
         test_list.tasks[0].done = True
+        test_list.tasks[2].prio = True
         test_list.tasks[3].done = True
         test_list.tasks[4].done = True
 
