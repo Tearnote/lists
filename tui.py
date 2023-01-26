@@ -426,7 +426,7 @@ class TUI:
 
         :param *args: Tuple of (index, text)
         """
-        renamed_list = cls.notebook.get(args[0])
+        renamed_list = cls.notebook[args[0]]
         old_name = renamed_list.name
         renamed_list.name = args[1]
         cls.last_result = f"List \"{old_name}\" renamed to \"{args[1]}\"."
@@ -437,7 +437,7 @@ class TUI:
 
         :param *args: Tuple of (index, _)
         """
-        cls.active_list = cls.notebook.get(args[0])
+        cls.active_list = cls.notebook[args[0]]
         cls.last_result = f"Viewing list \"{cls.active_list.name}\"."
         cls._change_state(cls.State.TASK_VIEW)
 

@@ -1,4 +1,6 @@
-class Notebook:
+from collections.abc import Sequence
+
+class Notebook(Sequence):
     """Container class for all lists owned by the user
     """
 
@@ -7,7 +9,7 @@ class Notebook:
         """
         self._lists = []
 
-    def get(self, index):
+    def __getitem__(self, index):
         """Retrieve a list at the provided index
 
         :param index: one-based index of the list
@@ -17,6 +19,14 @@ class Notebook:
         :rtype: :class:`List`
         """
         return self._lists[index - 1]
+
+    def __len__(self):
+        """Return the number of lists
+
+        :return: list count
+        :rtype: int
+        """
+        return len(self._lists)
 
     def add(self, new_list):
         """Add a new list to the end of the notebook
