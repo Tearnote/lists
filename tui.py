@@ -131,6 +131,14 @@ class TUI:
             "instead."
         ], has_index_arg=True, index_arg_required=True)
         cls.task_view_commands.append(task_remove_command)
+        task_rename_command = Command("rename", cls._cmd_task_rename, [
+            f"Syntax: {Fore.GREEN}rename #{Style.RESET_ALL}",
+            "",
+            "Edit the task under the given index. The task will stay marked",
+            "as done or priority, only the text will change."
+        ], has_index_arg=True, index_arg_required=True, has_text_arg=True,
+                                      text_arg_required=True)
+        cls.task_view_commands.append(task_rename_command)
 
         # Set up test content
         Config.set("print_done_tasks", "yes")
@@ -449,3 +457,26 @@ class TUI:
         task_name = tasks[index].body
         tasks.pop(index)
         cls.last_result = f"Task \"{task_name}\" removed."
+
+    @classmethod
+    def _cmd_task_rename(cls, *args):
+        """Rename a task
+
+        :param *args: Tuple of (index, text)
+        """
+        tasks = cls.lists[cls.active_list].tasks
+        index = args[0] - 1
+
+        # Bound check
+        if index < 0 or index >= len(tasks):
+            cls.last_result = (
+                f"{Fore.RED}"
+                f"There is no task with index "
+                f"\"{args[0]}\"."
+                f"{Style.RESET_ALL}"
+            )
+            return
+
+        old_name = tasks[index].body
+        tasks[index].body = args[1]
+        cls.last_result = f"Task \"{old_name}\" renamed to \"{args[1]}\"."
