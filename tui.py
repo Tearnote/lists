@@ -122,6 +122,15 @@ class TUI:
             "in an un-done state."
         ], has_text_arg=True, text_arg_required=True)
         cls.task_view_commands.append(task_add_command)
+        task_remove_command = Command("remove", cls._cmd_task_remove, [
+            f"Syntax: {Fore.GREEN}remove #{Style.RESET_ALL}",
+            "",
+            "Remove the task under the given index. Be very careful with this",
+            "command, and always double-check the index - there is currently",
+            "no way to undo this operation. Consider marking the task as done",
+            "instead."
+        ], has_index_arg=True, index_arg_required=True)
+        cls.task_view_commands.append(task_remove_command)
 
         # Set up test content
         Config.set("print_done_tasks", "yes")
@@ -417,3 +426,26 @@ class TUI:
         """
         cls.lists[cls.active_list].tasks.append(Task(args[1]))
         cls.last_result = f"Task \"{args[1]}\" added."
+
+    @classmethod
+    def _cmd_task_remove(cls, *args):
+        """Remove a task from active list
+
+        :param *args: Tuple of (index, _)
+        """
+        tasks = cls.lists[cls.active_list].tasks
+        index = args[0] - 1
+
+        # Bound check
+        if index < 0 or index >= len(tasks):
+            cls.last_result = (
+                f"{Fore.RED}"
+                f"There is no task with index "
+                f"\"{args[0]}\"."
+                f"{Style.RESET_ALL}"
+            )
+            return
+
+        task_name = tasks[index].body
+        tasks.pop(index)
+        cls.last_result = f"Task \"{task_name}\" removed."
