@@ -1,3 +1,6 @@
+from colorama import Fore, Style
+
+
 class Config:
     """Facility for accessing global app configuration
     """
@@ -66,3 +69,23 @@ class Config:
         :rtype: :class:`Field`
         """
         return next(filter(lambda f: f.name == name, cls._fields))
+
+    @classmethod
+    def print(cls):
+        """Return the string with the human-readable state of all fields
+
+        :return: String with one field per line
+        :rtype: str
+        """
+        result = ""
+        for i in range(len(cls._fields)):
+            field = cls._fields[i]
+            index = i + 1
+            values_text = ""
+            if len(field.values) > 0:
+                values_text += f" {Fore.LIGHTBLACK_EX}["
+                values_text += ", ".join(field.values)
+                values_text += f"]{Style.RESET_ALL}"
+            result += f"#{index} {field.description}: {field.value}"
+            result += f"{values_text}\n"
+        return result

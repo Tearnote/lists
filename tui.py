@@ -237,6 +237,7 @@ class TUI:
             # Print the header
             put_at(0, 0, "=== SETTINGS ===\n")
             put("\n")
+            put(Config.print())
 
         if cls.state == cls.State.TASK_VIEW:
             # Print the header
