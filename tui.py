@@ -619,8 +619,12 @@ class TUI:
                 f"{Fore.RED}"
                 f"\"{args[1]}\""
                 f" is not an allowed value for setting "
-                f"\"{2}\"."
+                f"\"{Config.description_at(args[0])}\"."
                 f"{Style.RESET_ALL}"
             )
         else:
-            cls.last_result = f"Setting \"{2}\" changed to \"{args[1]}\"."
+            cls.last_result = (
+                f"Setting "
+                f"\"{Config.description_at(args[0])}\""
+                f" changed to "
+                f"\"{args[1]}\".")

@@ -92,6 +92,19 @@ class Config:
         field.value = value
 
     @classmethod
+    def description_at(cls, index):
+        """Return the description of the field at the provided index
+
+        :param index: Field index
+        :type index: int
+        :raises IndexError: The provided index is out of range
+        :return: The config field's description
+        :rtype: str
+        """
+        index -= 1
+        return cls._fields[index].description
+
+    @classmethod
     def _find_field(cls, name):
         """Retrieve the field object with the given name
 
