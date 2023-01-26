@@ -284,6 +284,9 @@ class TUI:
             command = cls._find_command(user_input.keyword)
             command.validate_and_run(user_input)
 
+        except IndexError as e:
+            cls.last_result = f"{Fore.RED}{e}{Style.RESET_ALL}"
+
         except StopIteration:  # Command not found in list
             cls.last_result = (
                 f"{Fore.RED}"

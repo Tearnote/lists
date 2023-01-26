@@ -1,5 +1,6 @@
 from collections.abc import Sequence
 
+
 class Notebook(Sequence):
     """Container class for all lists owned by the user
     """
@@ -18,7 +19,10 @@ class Notebook(Sequence):
         :return: list reference
         :rtype: :class:`List`
         """
-        return self._lists[index - 1]
+        try:
+            return self._lists[index - 1]
+        except IndexError as e:
+            raise IndexError(f"There is no list with index {index}")
 
     def __len__(self):
         """Return the number of lists
@@ -45,7 +49,10 @@ class Notebook(Sequence):
         :return: The removed list
         :rtype: :class:`List`
         """
-        return self._lists.pop(index - 1)
+        try:
+            return self._lists.pop(index - 1)
+        except IndexError as e:
+            raise IndexError(f"There is no list with index {index}")
 
     def __str__(self):
         """Return printable form of the notebook as numbered list of lists
