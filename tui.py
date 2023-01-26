@@ -233,6 +233,11 @@ class TUI:
                         badge += ", done!"
                 put(f"{idx} {name} ({badge})\n")
 
+        if cls.state == cls.State.SETTINGS:
+            # Print the header
+            put_at(0, 0, "=== SETTINGS ===\n")
+            put("\n")
+
         if cls.state == cls.State.TASK_VIEW:
             # Print the header
             put_at(0, 0, "=== TASKS ===\n")
@@ -241,7 +246,10 @@ class TUI:
             # Print the tasks
             put(cls.lists[cls.active_list])
 
-        if cls.state == cls.State.LIST_VIEW or cls.state == cls.State.TASK_VIEW:
+        if (
+                cls.state == cls.State.LIST_VIEW or
+                cls.state == cls.State.TASK_VIEW or
+                cls.state == cls.State.SETTINGS):
             # Print the sidebar
             sidebar_offset = cls.CONSOLE_SIZE[0] - cls.SIDE_PANE_WIDTH - 1
             y_pos = 0
