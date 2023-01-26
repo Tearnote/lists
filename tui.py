@@ -1,6 +1,6 @@
 from enum import Enum, auto
 
-from colorama import just_fix_windows_console, Fore, Style, Cursor
+from colorama import just_fix_windows_console, Fore, Style
 
 from config import Config
 from input import UserInput, Command
@@ -95,9 +95,9 @@ class TUI:
             "the \"#\" command (just the list index), and add some tasks to it."
         ], has_text_arg=True, text_arg_required=True)
         cls.list_view_commands.append(list_add_command)
-        list_enter_command = Command("", cls._cmd_list_enter, [],  # Help cannot be viewed
-                                has_index_arg=True,
-                                index_arg_required=True)
+        list_enter_command = Command("", cls._cmd_list_enter, [],
+                                     has_index_arg=True,
+                                     index_arg_required=True)
         cls.list_view_commands.append(list_enter_command)
         list_remove_command = Command("remove", cls._cmd_list_remove, [
             f"Syntax: {Fore.GREEN}remove #{Style.RESET_ALL}",
@@ -113,7 +113,7 @@ class TUI:
             "Change the name of a list under the given index. The contents",
             "of the list stay unchanged."
         ], has_index_arg=True, index_arg_required=True, has_text_arg=True,
-                                 text_arg_required=True)
+                                      text_arg_required=True)
         cls.list_view_commands.append(list_rename_command)
 
         # Set up test content
@@ -163,7 +163,6 @@ class TUI:
                 name = lst.name
                 done_count = lst.count_done()
                 task_count = len(lst.tasks)
-                badge = ""
                 if task_count == 0:
                     badge = "empty"
                 else:
