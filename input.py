@@ -100,10 +100,8 @@ class Command:
 
         :param user_input: Parsed user input string
         :type user_input: :class:`UserInput`
-        :raises ValueError: Invalid command for the input
-        :raises Command.MissingArgument: User didn't provide enough arguments
-        :raises Command.TooManyArguments: User provided too many arguments
-        :raises Command.InvalidIndex: User provided a non-integer index
+        :raises ValueError: Wrong command or number of arguments
+        :raises TypeError: User provided a non-integer index
         """
         if self.keyword != user_input.keyword:
             raise ValueError  # This should not happen to begin with
@@ -137,6 +135,6 @@ class Command:
             try:
                 index_int = int(index)
             except ValueError:
-                raise IndexError(f"Index value \"{index}\" is not valid")
+                raise TypeError(f"Index value \"{index}\" is not valid")
 
         self.callback(index_int, text)
