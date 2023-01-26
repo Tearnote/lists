@@ -605,5 +605,22 @@ class TUI:
 
         :param *args: Tuple of (index, value)
         """
-        Config.set_at(args[0], args[1])
-        cls.last_result = f"Setting \"{2}\" changed to \"{args[1]}\"."
+        try:
+            Config.set_at(args[0], args[1])
+        except IndexError:
+            cls.last_result = (
+                f"{Fore.RED}"
+                f"There is no setting with index "
+                f"\"{args[0]}\"."
+                f"{Style.RESET_ALL}"
+            )
+        except ValueError:
+            cls.last_result = (
+                f"{Fore.RED}"
+                f"\"{args[1]}\""
+                f" is not an allowed value for setting "
+                f"\"{2}\"."
+                f"{Style.RESET_ALL}"
+            )
+        else:
+            cls.last_result = f"Setting \"{2}\" changed to \"{args[1]}\"."
