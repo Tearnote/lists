@@ -203,7 +203,7 @@ class TUI:
         ], has_index_arg=True, index_arg_required=True)
         cls.task_view_commands.add(task_prio_command)
         settings_set_command = Command("set", cls._cmd_settings_set, [
-            f"Syntax: {Fore.GREEN}set # ...",
+            f"Syntax: {Fore.GREEN}set # ...{Style.RESET_ALL}",
             "",
             "Change a setting under the provided index to a different value.",
             "If a list of values is show to the right of the setting,",
