@@ -61,7 +61,7 @@ class TUI:
     help_text = []  # List of lines shown on the screen in the help state
 
     notebook = Notebook()  # All to-do lists owned by the user
-    storage = Storage()  # Dropbox connection
+    storage = None  # Dropbox connection
 
     @classmethod
     def run(cls):
@@ -111,21 +111,15 @@ class TUI:
             "automatically saved."
         ])
         cls.list_view_commands.add(settings_command)
-        save_command = Command("save", cls._cmd_save, [
-            f"Syntax: {Fore.GREEN}save{Style.RESET_ALL}",
+        connect_command = Command("connect", cls._cmd_connect, [
+            f"Syntax: {Fore.GREEN}connect{Style.RESET_ALL}",
             "",
-            "Save all your lists to online storage (Dropbox.) Previously saved",
-            "lists will be overwritten without warning."
+            "Start the Dropbox connection wizard. You will need to open a URL",
+            "in the browser, log in to Dropbox, and paste back",
+            "an authorization code. If already authorized, the connection",
+            "will be replaced with a new one."
         ])
-        cls.list_view_commands.add(save_command)
-        cls.task_view_commands.add(save_command)
-        load_command = Command("load", cls._cmd_load, [
-            f"Syntax: {Fore.GREEN}load{Style.RESET_ALL}",
-            "",
-            "Load all your lists from online storage (Dropbox.) Currently",
-            "visible lists will be replaced, unless there is a load failure."
-        ])
-        cls.list_view_commands.add(load_command)
+        cls.list_view_commands.add(connect_command)
         list_enter_command = Command("", cls._cmd_list_enter, [],
                                      has_index_arg=True,
                                      index_arg_required=True)
@@ -386,6 +380,34 @@ class TUI:
             cls.help_text = cls.GENERAL_HELP
             cls.last_result = "Help displayed. Input anything to return."
             cls._change_state(cls.State.HELP)
+
+    @classmethod
+    def _cmd_connect(cls, *_):
+        """Connect to Dropbox for save/load functionality
+        """
+        first_time = True if cls.storage is None else False
+        clear(cls.CONSOLE_SIZE)
+        cls.storage = Storage()  # Auth wizard happens here
+
+        if first_time:  # Add save/load commands, which are now usable
+            save_command = Command("save", cls._cmd_save, [
+                f"Syntax: {Fore.GREEN}save{Style.RESET_ALL}",
+                "",
+                "Save all your lists to online storage (Dropbox.) Previously",
+                "saved lists will be overwritten without warning."
+            ])
+            cls.list_view_commands.add(save_command)
+            cls.task_view_commands.add(save_command)
+            load_command = Command("load", cls._cmd_load, [
+                f"Syntax: {Fore.GREEN}load{Style.RESET_ALL}",
+                "",
+                "Load all your lists from online storage (Dropbox.) Currently",
+                "visible lists will be replaced, unless there is a load",
+                "failure."
+            ])
+            cls.list_view_commands.add(load_command)
+
+        cls.last_result = "Dropbox account connected successfully."
 
     @classmethod
     def _cmd_save(cls, *_):

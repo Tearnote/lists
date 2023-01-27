@@ -1,6 +1,7 @@
 import os
 
 import dropbox
+from colorama import Fore, Style
 from dropbox.files import WriteMode
 
 from console import put
@@ -22,10 +23,16 @@ class Storage:
             key, use_pkce=True, token_access_type='offline')
         authorize_url = auth_flow.start()
 
-        put("To authenticate with Dropbox, please open this URL: \n")
-        put(f"{authorize_url}\n")
-        put("Log in to Dropbox, and click \"Allow\".\n")
+        put("=== DROPBOX WIZARD ===\n")
+        put("\n")
+        put("To authenticate with Dropbox, please open this URL in your\n")
+        put("web browser: \n")
+        put("\n")
+        put(f"{Fore.LIGHTGREEN_EX}{authorize_url}{Style.RESET_ALL}\n")
+        put("\n")
+        put("On the page, log in to Dropbox if needed, and click \"Allow\".\n")
         put("Once you receive the authorization code, please paste it below:\n")
+        put("\n")
         put("> ")
         auth_code = input().strip()
 
