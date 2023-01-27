@@ -1,4 +1,6 @@
+import pickle
 from enum import Enum, auto
+import pickle
 
 from colorama import just_fix_windows_console, Fore, Style
 

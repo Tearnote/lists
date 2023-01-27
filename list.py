@@ -90,3 +90,14 @@ class List(Sequence):
         :rtype: int
         """
         return reduce(lambda acc, t: acc + 1 if t.done else acc, self._tasks, 0)
+
+    def data(self):
+        """Return the dict representation of the list
+
+        :return: A dictionary holding list contents
+        :rtype: dict
+        """
+        return {
+            "name": self.name,
+            "tasks": [task.data() for task in self._tasks]
+        }

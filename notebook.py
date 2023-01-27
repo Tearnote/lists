@@ -1,3 +1,4 @@
+import json
 from collections.abc import Sequence
 
 
@@ -74,3 +75,22 @@ class Notebook(Sequence):
                 result += "\n"
             result += f"{idx} {name} ({badge})"
         return result
+
+    def data(self):
+        """Return the dict representation of the notebook
+
+        :return: A dictionary holding the notebook contents
+        :rtype: dict
+        """
+        return {
+            "version": 1,  # For future backwards compatibility
+            "lists": [lst.data() for lst in self._lists]
+        }
+
+    def serialize(self):
+        """Return the notebook contents as a JSON string
+
+        :return: The JSON representation of the notebook
+        :rtype: str
+        """
+        return json.dumps(self.data())

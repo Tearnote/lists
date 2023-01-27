@@ -34,3 +34,15 @@ class Task:
             return "==="
         else:  # print_type == "yes"
             return self.body
+
+    def data(self):
+        """Return a dict representation of the task
+
+        :return: A dictionary holding task details
+        :rtype: dict
+        """
+        return {
+            "body": self.body,
+            "done": self.done,
+            "prio": self.prio
+        }
