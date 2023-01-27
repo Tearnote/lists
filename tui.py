@@ -55,7 +55,7 @@ class TUI:
         f"{Fore.GREEN}load{Style.RESET_ALL}"
         " commands."
     ]
-    MAX_NAME_LENGTH = 29  # Max length of any user-provided string
+    MAX_NAME_LENGTH = 40  # Max length of any user-provided string
 
     state = State.NONE  # Current view of the global state machine
     previous_states = []  # State "undo" support
