@@ -43,7 +43,7 @@ class Config:
 
     _fields = [
         Field("print_done_tasks",
-              "hidden",
+              "yes",
               "Show done tasks",
               ["yes", "no", "hidden"]),
         Field("save_on_exit",
