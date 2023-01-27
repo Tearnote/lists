@@ -29,9 +29,8 @@ class TUI:
     SIDE_PANE_WIDTH = 16
     GENERAL_HELP = [
         "Lists is controlled with text commands. You can see the list of",
-        "available commands in the pane on the right.",
-        "",
-        "Commands begin with a keyword, sometimes followed by arguments.",
+        "available commands in the pane on the right. Commands begin with",
+        "a keyword, sometimes followed by arguments.",
         "",
         "The argument \"#\" refers to an item index, for example the number",
         "of a list or a task. You can see the index next to each item",
@@ -44,8 +43,16 @@ class TUI:
         "is not required.",
         "",
         "You can also receive help on a specific command, like this:",
+        f"{Fore.GREEN}help delete{Style.RESET_ALL}",
         "",
-        f"help {Fore.GREEN}delete{Style.RESET_ALL}",
+        f"To keep your lists, use the "
+        f"{Fore.GREEN}connect{Style.RESET_ALL}"
+        " command to link your Dropbox account.",
+        "This will enable the "
+        f"{Fore.GREEN}save{Style.RESET_ALL}"
+        " and "
+        f"{Fore.GREEN}load{Style.RESET_ALL}"
+        " commands."
     ]
     MAX_NAME_LENGTH = 29  # Max length of any user-provided string
 

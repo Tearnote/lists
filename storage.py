@@ -32,7 +32,6 @@ class Storage:
         put("\n")
         put("On the page, log in to Dropbox if needed, and click \"Allow\".\n")
         put("Once you receive the authorization code, please paste it below:\n")
-        put("\n")
         put("> ")
         auth_code = input().strip()
 
