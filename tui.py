@@ -1,6 +1,4 @@
-import pickle
 from enum import Enum, auto
-import pickle
 
 from colorama import just_fix_windows_console, Fore, Style
 
@@ -8,6 +6,7 @@ from config import Config
 from input import UserInput, Command, CommandList
 from list import List
 from notebook import Notebook
+from storage import Storage
 from task import Task
 from console import put, clear, put_at
 
@@ -62,6 +61,7 @@ class TUI:
     help_text = []  # List of lines shown on the screen in the help state
 
     notebook = Notebook()  # All to-do lists owned by the user
+    storage = Storage()  # Dropbox connection
 
     @classmethod
     def run(cls):
@@ -337,6 +337,7 @@ class TUI:
         """Terminate the main loop
         """
         cls._change_state(cls.State.SHUTDOWN)
+        cls.storage.upload(cls.notebook.serialize())
         put("Goodbye!\n")
 
     @classmethod
