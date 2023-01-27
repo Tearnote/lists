@@ -63,7 +63,7 @@ class Notebook(Sequence):
             idx = f"#{i + 1}"
             name = lst.name
             done_count = lst.count_done()
-            task_count = len(lst.tasks)
+            task_count = len(lst)
             if task_count == 0:
                 badge = "empty"
             else:

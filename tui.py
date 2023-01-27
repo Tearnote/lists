@@ -191,15 +191,15 @@ class TUI:
         # Set up test content
         Config.set("print_done_tasks", "yes")
         test_list = List("Main")
-        test_list.tasks.append(Task("Hello world!"))
-        test_list.tasks.append(Task("How are you?"))
-        test_list.tasks.append(Task("I'm fine, thanks"))
-        test_list.tasks.append(Task("The weather is horrible"))
-        test_list.tasks.append(Task("It's freezing and wet"))
-        test_list.tasks[0].done = True
-        test_list.tasks[2].prio = True
-        test_list.tasks[3].done = True
-        test_list.tasks[4].done = True
+        test_list.add(Task("Hello world!"))
+        test_list.add(Task("How are you?"))
+        test_list.add(Task("I'm fine, thanks"))
+        test_list.add(Task("The weather is horrible"))
+        test_list.add(Task("It's freezing and wet"))
+        test_list[0].done = True
+        test_list[2].prio = True
+        test_list[3].done = True
+        test_list[4].done = True
         cls.notebook.add(test_list)
 
         # Main loop
@@ -406,7 +406,7 @@ class TUI:
 
         :param *args: Tuple of (_, text)
         """
-        cls.active_list.tasks.append(Task(args[1]))
+        cls.active_list.add(Task(args[1]))
         cls.last_result = f"Task \"{args[1]}\" added."
 
     @classmethod
@@ -415,22 +415,8 @@ class TUI:
 
         :param *args: Tuple of (index, _)
         """
-        tasks = cls.active_list.tasks
-        index = args[0] - 1
-
-        # Bound check
-        if index < 0 or index >= len(tasks):
-            cls.last_result = (
-                f"{Fore.RED}"
-                f"There is no task with index "
-                f"\"{args[0]}\"."
-                f"{Style.RESET_ALL}"
-            )
-            return
-
-        task_name = tasks[index].body
-        tasks.pop(index)
-        cls.last_result = f"Task \"{task_name}\" removed."
+        removed_task = cls.active_list.remove(args[0])
+        cls.last_result = f"Task \"{removed_task.body}\" removed."
 
     @classmethod
     def _cmd_task_rename(cls, *args):
@@ -438,21 +424,9 @@ class TUI:
 
         :param *args: Tuple of (index, text)
         """
-        tasks = cls.active_list.tasks
-        index = args[0] - 1
-
-        # Bound check
-        if index < 0 or index >= len(tasks):
-            cls.last_result = (
-                f"{Fore.RED}"
-                f"There is no task with index "
-                f"\"{args[0]}\"."
-                f"{Style.RESET_ALL}"
-            )
-            return
-
-        old_name = tasks[index].body
-        tasks[index].body = args[1]
+        renamed_task = cls.active_list[args[0]]
+        old_name = renamed_task.body
+        renamed_task.body = args[1]
         cls.last_result = f"Task \"{old_name}\" renamed to \"{args[1]}\"."
 
     @classmethod
@@ -461,22 +435,10 @@ class TUI:
 
         :param *args: Tuple of (index, _)
         """
-        tasks = cls.active_list.tasks
-        index = args[0] - 1
-
-        # Bound check
-        if index < 0 or index >= len(tasks):
-            cls.last_result = (
-                f"{Fore.RED}"
-                f"There is no task with index "
-                f"\"{args[0]}\"."
-                f"{Style.RESET_ALL}"
-            )
-            return
-
-        neg = "not " if tasks[index].done else ""
-        tasks[index].done = not tasks[index].done
-        cls.last_result = f"Task \"{tasks[index].body}\" marked as {neg}done."
+        toggled_task = cls.active_list[args[0]]
+        neg = "not " if toggled_task.done else ""
+        toggled_task.done = not toggled_task.done
+        cls.last_result = f"Task \"{toggled_task.body}\" marked as {neg}done."
 
     @classmethod
     def _cmd_task_prio(cls, *args):
@@ -484,22 +446,10 @@ class TUI:
 
         :param *args: Tuple of (index, _)
         """
-        tasks = cls.active_list.tasks
-        index = args[0] - 1
-
-        # Bound check
-        if index < 0 or index >= len(tasks):
-            cls.last_result = (
-                f"{Fore.RED}"
-                f"There is no task with index "
-                f"\"{args[0]}\"."
-                f"{Style.RESET_ALL}"
-            )
-            return
-
-        neg = "not " if tasks[index].prio else ""
-        tasks[index].prio = not tasks[index].prio
-        cls.last_result = f"Task \"{tasks[index].body}\" marked as {neg}priority."
+        toggled_task = cls.active_list[args[0]]
+        neg = "not " if toggled_task.prio else ""
+        toggled_task.prio = not toggled_task.prio
+        cls.last_result = f"Task \"{toggled_task.body}\" marked as {neg}priority."
 
     @classmethod
     def _cmd_settings(cls, *_):
