@@ -3,6 +3,8 @@ import os
 import dropbox
 from dropbox.files import WriteMode
 
+from console import put
+
 
 class Storage:
     """Class for storing and loading of data in the cloud
@@ -11,10 +13,29 @@ class Storage:
     REMOTE_PATH = "/lists.json"
 
     def __init__(self):
-        """Constructor method
+        """Constructor method, authenticates the user with Dropbox
         """
-        token = os.environ['TOKEN']
-        self._dbx = dropbox.Dropbox(token)
+        # Adapted from example code at:
+        # https://github.com/dropbox/dropbox-sdk-python/blob/main/example/oauth/commandline-oauth-pkce.py
+        key = os.environ['APP_KEY']
+        auth_flow = dropbox.DropboxOAuth2FlowNoRedirect(
+            key, use_pkce=True, token_access_type='offline')
+        authorize_url = auth_flow.start()
+
+        put("To authenticate with Dropbox, please open this URL: \n")
+        put(f"{authorize_url}\n")
+        put("Log in to Dropbox, and click \"Allow\".\n")
+        put("Once you receive the authorization code, please paste it below:\n")
+        put("> ")
+        auth_code = input().strip()
+
+        try:
+            oauth_result = auth_flow.finish(auth_code)
+        except Exception as e:
+            raise RuntimeError(f"Failed to authenticate with Dropbox: {e}")
+
+        self._dbx = dropbox.Dropbox(
+            oauth2_refresh_token=oauth_result.refresh_token, app_key=key)
 
     def download(self):
         """Retrieve data from storage, and return as text
