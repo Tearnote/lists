@@ -491,7 +491,10 @@ class TUI:
         toggled_task = cls.active_list[args[0]]
         neg = "not " if toggled_task.prio else ""
         toggled_task.prio = not toggled_task.prio
-        cls.last_result = f"Task \"{toggled_task.body}\" marked as {neg}priority."
+        cls.last_result = (
+            f"Task "
+            f"\"{toggled_task.body}\""
+            f" marked as {neg}priority.")
 
     @classmethod
     def _cmd_settings(cls, *_):
