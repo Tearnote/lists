@@ -1,26 +1,19 @@
 import json
 from collections.abc import Sequence
 
+from list import List
+
 
 class Notebook(Sequence):
     """Container class for all lists owned by the user
     """
 
+    DATA_VERSION = 1
+
     def __init__(self):
         """Constructor method
         """
         self._lists = []
-
-    @classmethod
-    def from_json(cls, json_data):
-        """Create a new notebook instance from JSON representation
-
-        :param json_data: JSON string, as previously generated with serialize()
-        :type json_data: str
-        """
-        print(json_data)
-        return Notebook()
-
 
     def __getitem__(self, index):
         """Retrieve a list at the provided index
@@ -94,9 +87,24 @@ class Notebook(Sequence):
         :rtype: dict
         """
         return {
-            "version": 1,  # For future backwards compatibility
+            "version": self.DATA_VERSION,  # For future backwards compatibility
             "lists": [lst.data() for lst in self._lists]
         }
+
+    @classmethod
+    def from_data(cls, data):
+        """Create a new notebook from dict representation
+
+        :param data: A dictionary as previously returned by data()
+        :type data: dict
+        :return: A new notebook instance
+        :rtype: :class:`Notebook`
+        """
+        result = Notebook()
+        assert data["version"] == cls.DATA_VERSION  # Compatibility check
+        result._lists = [List.from_data(lst) for lst in data["lists"]]
+        return result
+
 
     def serialize(self):
         """Return the notebook contents as a JSON string
@@ -105,3 +113,14 @@ class Notebook(Sequence):
         :rtype: str
         """
         return json.dumps(self.data())
+
+    @classmethod
+    def from_json(cls, json_data):
+        """Create a new notebook instance from JSON representation
+
+        :param json_data: JSON string, as previously generated with serialize()
+        :type json_data: str
+        :return: A new notebook instance
+        :rtype: :class:`Notebook`
+        """
+        return Notebook.from_data(json.loads(json_data))

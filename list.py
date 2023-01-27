@@ -4,6 +4,7 @@ from functools import reduce
 from colorama import Fore, Style
 
 from config import Config
+from task import Task
 
 
 class List(Sequence):
@@ -101,3 +102,16 @@ class List(Sequence):
             "name": self.name,
             "tasks": [task.data() for task in self._tasks]
         }
+
+    @classmethod
+    def from_data(cls, data):
+        """Create a new list from dict representation
+
+        :param data: A dictionary as previously returned by data()
+        :type data: dict
+        :return: A new list instance
+        :rtype: :class:`List`
+        """
+        result = List(data["name"])
+        result._tasks = [Task.from_data(task) for task in data["tasks"]]
+        return result

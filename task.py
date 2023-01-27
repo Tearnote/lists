@@ -46,3 +46,14 @@ class Task:
             "done": self.done,
             "prio": self.prio
         }
+
+    @classmethod
+    def from_data(cls, data):
+        """Create a new task from dict representation
+
+        :param data: A dictionary as previously returned by data()
+        :type data: dict
+        :return: A new task instance
+        :rtype: :class:`Task`
+        """
+        return Task(data["body"], data["done"], data["prio"])
