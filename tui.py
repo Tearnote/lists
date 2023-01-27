@@ -65,7 +65,8 @@ class TUI:
     task_view_commands = CommandList()  # Commands available in TASK_VIEW state
     settings_commands = CommandList()  # Commands available in SETTINGS state
 
-    last_result = "Welcome to Lists."  # Feedback from the most recent command
+    # Feedback from the most recent command
+    last_result = "Welcome to Lists. Type \"help\" for assistance."
     help_text = []  # List of lines shown on the screen in the help state
 
     notebook = Notebook()  # All to-do lists owned by the user
