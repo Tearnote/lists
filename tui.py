@@ -350,6 +350,8 @@ class TUI:
     def _cmd_exit(cls, *_):
         """Terminate the main loop
         """
+        if Config.get("save_on_exit") == "yes":
+            cls._cmd_save(_)
         cls._change_state(cls.State.SHUTDOWN)
         put("Goodbye!\n")
 

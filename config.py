@@ -45,7 +45,11 @@ class Config:
         Field("print_done_tasks",
               "hidden",
               "Show done tasks",
-              ["yes", "no", "hidden"])
+              ["yes", "no", "hidden"]),
+        Field("save_on_exit",
+              "yes",
+              "Save on exit",
+              ["yes", "no"])
     ]
 
     @classmethod
