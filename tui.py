@@ -118,6 +118,7 @@ class TUI:
             "lists will be overwritten without warning."
         ])
         cls.list_view_commands.add(save_command)
+        cls.task_view_commands.add(save_command)
         load_command = Command("load", cls._cmd_load, [
             f"Syntax: {Fore.GREEN}load{Style.RESET_ALL}",
             "",
