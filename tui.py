@@ -111,6 +111,13 @@ class TUI:
             "automatically saved."
         ])
         cls.list_view_commands.add(settings_command)
+        save_command = Command("save", cls._cmd_save, [
+            f"Syntax: {Fore.GREEN}save{Style.RESET_ALL}",
+            "",
+            "Save all your lists to online storage (Dropbox.) Previously saved",
+            "lists will be overwritten without warning."
+        ])
+        cls.list_view_commands.add(save_command)
         list_enter_command = Command("", cls._cmd_list_enter, [],
                                      has_index_arg=True,
                                      index_arg_required=True)
@@ -295,7 +302,7 @@ class TUI:
             command = command_list.find(user_input.keyword)
             command.validate_and_run(user_input)
 
-        except (IndexError, ValueError, TypeError,
+        except (IndexError, ValueError, TypeError, RuntimeError,
                 CommandList.CommandNameError) as e:
             cls.last_result = f"{Fore.RED}{e}{Style.RESET_ALL}"
 
@@ -337,7 +344,6 @@ class TUI:
         """Terminate the main loop
         """
         cls._change_state(cls.State.SHUTDOWN)
-        cls.storage.upload(cls.notebook.serialize())
         put("Goodbye!\n")
 
     @classmethod
@@ -371,6 +377,15 @@ class TUI:
             cls.help_text = cls.GENERAL_HELP
             cls.last_result = "Help displayed. Input anything to return."
             cls._change_state(cls.State.HELP)
+
+    @classmethod
+    def _cmd_save(cls, *_):
+        """Save notebook to storage
+
+        :param *_: unused
+        """
+        cls.storage.upload(cls.notebook.serialize())
+        cls.last_result = f"Lists saved successfully."
 
     @classmethod
     def _cmd_list_add(cls, *args):
