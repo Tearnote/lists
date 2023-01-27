@@ -21,7 +21,7 @@ class Notebook(Sequence):
         """
         try:
             return self._lists[index - 1]
-        except IndexError as e:
+        except IndexError:
             raise IndexError(f"There is no list with index {index}")
 
     def __len__(self):
@@ -51,7 +51,7 @@ class Notebook(Sequence):
         """
         try:
             return self._lists.pop(index - 1)
-        except IndexError as e:
+        except IndexError:
             raise IndexError(f"There is no list with index {index}")
 
     def __str__(self):
