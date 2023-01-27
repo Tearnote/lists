@@ -215,18 +215,13 @@ class TUI:
                                        text_arg_required=True)
         cls.settings_commands.add(settings_set_command)
 
-        # Set up test content
-        Config.set("print_done_tasks", "yes")
-        test_list = List("Main")
-        test_list.add(Task("Hello world!"))
-        test_list.add(Task("How are you?"))
-        test_list.add(Task("I'm fine, thanks"))
-        test_list.add(Task("The weather is horrible"))
-        test_list.add(Task("It's freezing and wet"))
-        test_list[0].done = True
+        # Set up example content
+        test_list = List("Example list")
+        test_list.add(Task("Incomplete task"))
+        test_list.add(Task("Important task"))
+        test_list.add(Task("Completed task"))
         test_list[2].prio = True
         test_list[3].done = True
-        test_list[4].done = True
         cls.notebook.add(test_list)
 
         # Main loop
