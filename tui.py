@@ -1,3 +1,4 @@
+import math
 from enum import Enum, auto
 
 from colorama import just_fix_windows_console, Fore, Style
@@ -283,7 +284,9 @@ class TUI:
                 y_pos += 1
 
         # Print the result message
-        put_at(0, cls.CONSOLE_SIZE[1] - 2, f"{cls.last_result}\n")
+        result_height = int(math.ceil(len(cls.last_result) / 80))
+        put_at(0, cls.CONSOLE_SIZE[1] - 1 - result_height,
+               f"{cls.last_result}\n")
 
     @classmethod
     def _parse(cls, cmd):
