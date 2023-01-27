@@ -33,7 +33,6 @@ class Config:
             :type value: str
             :raises ValueError: Value is not valid
             """
-            print(self.values, len(self.values), value, self.values.count(value))
             if len(self.values) > 0 and self.values.count(value) == 0:
                 raise ValueError(
                     f"\"{value}\""
