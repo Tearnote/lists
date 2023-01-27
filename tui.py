@@ -50,7 +50,7 @@ class TUI:
     MAX_NAME_LENGTH = 29  # Max length of any user-provided string
 
     state = State.NONE  # Current view of the global state machine
-    previous_state = State.NONE  # State "undo" support
+    previous_states = []  # State "undo" support
     active_list = None  # Reference to currently viewed list in task view
 
     list_view_commands = CommandList()  # Commands available in LIST_VIEW state
@@ -336,15 +336,14 @@ class TUI:
         :param new_state: The new state to replace the current one
         :type new_state: :class:`TUI.State`
         """
-        cls.previous_state = cls.state
+        cls.previous_states.append(cls.state)
         cls.state = new_state
 
     @classmethod
     def _undo_state(cls):
         """Undo the most recent state change
         """
-        cls.state = cls.previous_state
-        cls.previous_state = cls.State.NONE
+        cls.state = cls.previous_states.pop()
         cls.last_result = "Welcome to Lists."
 
     @classmethod
