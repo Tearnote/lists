@@ -26,6 +26,22 @@ class Config:
             self.description = description
             self.values = [] if values is None else values
 
+        def set(self, value):
+            """Sets the field to provided value, with validity checking
+
+            :param value: New value to set
+            :type value: str
+            :raises ValueError: Value is not valid
+            """
+            print(self.values, len(self.values), value, self.values.count(value))
+            if len(self.values) > 0 and self.values.count(value) == 0:
+                raise ValueError(
+                    f"\"{value}\""
+                    f" is not an allowed value for "
+                    f"\"{self.description}\".")
+
+            self.value = value
+
     _fields = [
         Field("print_done_tasks",
               "hidden",
@@ -39,6 +55,7 @@ class Config:
 
         :param name: Field name
         :type name: str
+        :raises ValueError: No field with such name
         :return: The value of the config field
         :rtype: str
         """
@@ -52,15 +69,10 @@ class Config:
         :type name: str
         :param value: New value to set on the field
         :type value: str
-        :raises ValueError: The provided value is invalid for the field
+        :raises ValueError: No field with such name, or the provided value
+        is invalid for the field
         """
-        field = cls._find_field(name)
-
-        # Value check
-        if len(field.values) > 0 and field.values.count(value) == 0:
-            raise ValueError
-
-        field.value = value
+        cls._find_field(name).set(value)
 
     @classmethod
     def set_at(cls, index, value):
@@ -76,16 +88,10 @@ class Config:
         :raises IndexError: The provided index is out of range
         :raises ValueError: The provided value is invalid for the field
         """
-
-        index -= 1
-
-        field = cls._fields[index]
-
-        # Value check
-        if len(field.values) > 0 and field.values.count(value) == 0:
-            raise ValueError
-
-        field.value = value
+        try:
+            cls._fields[index - 1].set(value)
+        except IndexError:
+            raise IndexError(f"There is no field with index {index}.")
 
     @classmethod
     def description_at(cls, index):
@@ -106,10 +112,14 @@ class Config:
 
         :param name: Field name
         :type name: str
+        :raises ValueError: Field was not found
         :return: The field object
         :rtype: :class:`Field`
         """
-        return next(filter(lambda f: f.name == name, cls._fields))
+        try:
+            return next(filter(lambda f: f.name == name, cls._fields))
+        except StopIteration:
+            raise ValueError(f"There is no config field called \"{name}\"")
 
     @classmethod
     def print(cls):
