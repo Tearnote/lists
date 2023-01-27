@@ -11,6 +11,17 @@ class Notebook(Sequence):
         """
         self._lists = []
 
+    @classmethod
+    def from_json(cls, json_data):
+        """Create a new notebook instance from JSON representation
+
+        :param json_data: JSON string, as previously generated with serialize()
+        :type json_data: str
+        """
+        print(json_data)
+        return Notebook()
+
+
     def __getitem__(self, index):
         """Retrieve a list at the provided index
 

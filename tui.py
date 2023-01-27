@@ -118,6 +118,13 @@ class TUI:
             "lists will be overwritten without warning."
         ])
         cls.list_view_commands.add(save_command)
+        load_command = Command("load", cls._cmd_load, [
+            f"Syntax: {Fore.GREEN}load{Style.RESET_ALL}",
+            "",
+            "Load all your lists from online storage (Dropbox.) Currently",
+            "visible lists will be replaced, unless there is a load failure."
+        ])
+        cls.list_view_commands.add(load_command)
         list_enter_command = Command("", cls._cmd_list_enter, [],
                                      has_index_arg=True,
                                      index_arg_required=True)
@@ -386,6 +393,15 @@ class TUI:
         """
         cls.storage.upload(cls.notebook.serialize())
         cls.last_result = f"Lists saved successfully."
+
+    @classmethod
+    def _cmd_load(cls, *_):
+        """Load notebook from storage
+
+        :param *_: unused
+        """
+        cls.notebook = Notebook.from_json(cls.storage.download())
+        cls.last_result = f"Lists loaded successfully."
 
     @classmethod
     def _cmd_list_add(cls, *args):
