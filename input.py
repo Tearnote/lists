@@ -39,6 +39,14 @@ class UserInput:
 
         return cls(keyword, args, index_arg, text_arg)
 
+    def truncate(self, char_limit):
+        """Limit the text argument to the provided number of characters
+
+        :param char_limit: Maximum allowed length
+        """
+        self.args = self.args[:char_limit]
+        self.text_arg = self.text_arg[:char_limit]
+
 
 class Command:
     """A user command, which might accept arguments and runs provided code

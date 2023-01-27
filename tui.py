@@ -46,6 +46,7 @@ class TUI:
         "",
         f"help {Fore.GREEN}delete{Style.RESET_ALL}",
     ]
+    MAX_NAME_LENGTH = 29  # Max length of any user-provided string
 
     state = State.NONE  # Current view of the global state machine
     previous_state = State.NONE  # State "undo" support
@@ -117,7 +118,10 @@ class TUI:
             "",
             "Add a new empty list with the provided name. After adding",
             "the list, you will probably want to enter it with",
-            "the \"#\" command (just the list index), and add some tasks to it."
+            "the \"#\" command (just the list index), and add some tasks",
+            "to it.",
+            f"The list name can be up to {cls.MAX_NAME_LENGTH} characters long."
+
         ], has_text_arg=True, text_arg_required=True)
         cls.list_view_commands.add(list_add_command)
         list_remove_command = Command("remove", cls._cmd_list_remove, [
@@ -132,7 +136,8 @@ class TUI:
             f"Syntax: {Fore.GREEN}rename #{Style.RESET_ALL}",
             "",
             "Change the name of a list under the given index. The contents",
-            "of the list stay unchanged."
+            "of the list stay unchanged.",
+            f"The list name can be up to {cls.MAX_NAME_LENGTH} characters long."
         ], has_index_arg=True, index_arg_required=True, has_text_arg=True,
                                       text_arg_required=True)
         cls.list_view_commands.add(list_rename_command)
@@ -140,7 +145,8 @@ class TUI:
             f"Syntax: {Fore.GREEN}add #{Style.RESET_ALL}",
             "",
             "Add a task to the list. The task will be added at the end,",
-            "in an un-done state."
+            "in an un-done state.",
+            f"The task name can be up to {cls.MAX_NAME_LENGTH} characters long."
         ], has_text_arg=True, text_arg_required=True)
         cls.task_view_commands.add(task_add_command)
         task_remove_command = Command("remove", cls._cmd_task_remove, [
@@ -156,7 +162,8 @@ class TUI:
             f"Syntax: {Fore.GREEN}rename #{Style.RESET_ALL}",
             "",
             "Edit the task under the given index. The task will stay marked",
-            "as done or priority, only the text will change."
+            "as done or priority, only the text will change.",
+            f"The task name can be up to {cls.MAX_NAME_LENGTH} characters long."
         ], has_index_arg=True, index_arg_required=True, has_text_arg=True,
                                       text_arg_required=True)
         cls.task_view_commands.add(task_rename_command)
@@ -280,6 +287,7 @@ class TUI:
 
         # Command parsing and execution
         user_input = UserInput.parse(cmd)
+        user_input.truncate(cls.MAX_NAME_LENGTH)
         try:
             command_list = cls._get_command_list()
             command = command_list.find(user_input.keyword)
