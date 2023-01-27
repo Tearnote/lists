@@ -390,8 +390,6 @@ class TUI:
     @classmethod
     def _cmd_save(cls, *_):
         """Save notebook to storage
-
-        :param *_: unused
         """
         cls.storage.upload(cls.notebook.serialize())
         cls.last_result = f"Lists saved successfully."
@@ -399,8 +397,6 @@ class TUI:
     @classmethod
     def _cmd_load(cls, *_):
         """Load notebook from storage
-
-        :param *_: unused
         """
         cls.notebook = Notebook.from_json(cls.storage.download())
         cls.last_result = f"Lists loaded successfully."
