@@ -1,3 +1,4 @@
 # Your requirements go here
 colorama~=0.4.6
 dropbox~=11.36.0
+gdshortener~=1.0.1

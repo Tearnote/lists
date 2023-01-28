@@ -1,6 +1,7 @@
 import os
 
 import dropbox
+import gdshortener
 from colorama import Fore, Style
 from dropbox.files import WriteMode
 
@@ -23,12 +24,22 @@ class Storage:
             key, use_pkce=True, token_access_type='offline')
         authorize_url = auth_flow.start()
 
+        # Shorten the URL for easier copypaste from console
+        shortener = gdshortener.ISGDShortener()
+        short_url = shortener.shorten(authorize_url)[0]
+
         put("=== DROPBOX WIZARD ===\n")
         put("\n")
-        put("To authenticate with Dropbox, please open this URL in your\n")
+        put("To authenticate with Dropbox, please open this URL in your ")
         put("web browser: \n")
         put("\n")
-        put(f"{Fore.LIGHTGREEN_EX}{authorize_url}{Style.RESET_ALL}\n")
+        put(f"{Fore.LIGHTGREEN_EX}{short_url}{Style.RESET_ALL}\n")
+        put("\n")
+        put("(The link has been shortened for convenience, and should lead\n")
+        put("to a URL beginning with ")
+        put("\"https://www.dropbox.com/oauth2/authorize\".\n")
+        put("If the link matches this pattern, proceed past the is.gd ")
+        put("warning page.)\n")
         put("\n")
         put("On the page, log in to Dropbox if needed, and click \"Allow\".\n")
         put("Once you receive the authorization code, please paste it below:\n")
