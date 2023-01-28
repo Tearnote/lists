@@ -87,3 +87,10 @@ Lists is a TUI application, but it's currently configured to run in the Code Ins
     -   `files.content.write`,
     -   `files.content.read`,
 7.  Copy the App key from the Dropbox app console, and add it as a config var value in Heroku, with key `APP_KEY`.
+
+## Bugs
+
+-   **App does not save user settings or Dropbox access tokens**  
+    Because of the project requirements, this app needs to be usable in the Code Institute web terminal environment. This makes some features unfeasible to implement. For example, since it does not expose user-local storage such as browser cookies or local filesystem, it's not possible to save the settings and Dropbox access tokens securely. To make the app usable for desktop use, compatibility with the web terminal would need to be dropped.
+-   **Console size is hardcoded to 80x24**  
+    Size of the console is locked to the size available in the web console. To be compatible with all sorts of desktop terminals, the size would need to be queried with a syscall. The app is already "responsive", so querying the size would be enough.
