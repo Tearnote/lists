@@ -79,7 +79,7 @@ class List(Sequence):
             if task.done:
                 color = Fore.LIGHTBLACK_EX
             elif task.prio:
-                color = Fore.LIGHTMAGENTA_EX
+                color = Fore.LIGHTCYAN_EX
             result += f"{color}#{i + 1} {task}{Style.RESET_ALL}\n"
 
         return result
