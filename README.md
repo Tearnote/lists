@@ -57,4 +57,5 @@ Graceful and helpful handling of incorrect inputs.
     - Error handling via exceptions,
     - PEP 8 compliant,
     - Minimal dependencies,
+    - Serialization to/from JSON,
     - Communication with web services via API libraries and OAuth.
