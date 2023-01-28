@@ -94,3 +94,13 @@ Lists is a TUI application, but it's currently configured to run in the Code Ins
     Because of the project requirements, this app needs to be usable in the Code Institute web terminal environment. This makes some features unfeasible to implement. For example, since it does not expose user-local storage such as browser cookies or local filesystem, it's not possible to save the settings and Dropbox access tokens securely. To make the app usable for desktop use, compatibility with the web terminal would need to be dropped.
 -   **Console size is hardcoded to 80x24**  
     Size of the console is locked to the size available in the web console. To be compatible with all sorts of desktop terminals, the size would need to be queried with a syscall. The app is already "responsive", so querying the size would be enough.
+
+## Attribution
+
+All external code is attributed inline.
+
+Libraries used are:
+
+-   [colorama](https://pypi.org/project/colorama/), for portable terminal colors, used under MIT license,
+-   [dropbox](https://pypi.org/project/dropbox/), for cloud storage of lists, used under MIT license,
+-   [gdshortener](https://pypi.org/project/gdshortener/), for shortening the Dropbox OAuth link, used under LGPL license.
