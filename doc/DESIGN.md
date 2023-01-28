@@ -63,6 +63,44 @@ At all times, the user is able to input commands at the bottom of the screen, fo
 
 For reference, a list of all available commands will be displayed on the right side of the screen, making the user aware of their choices.
 
+## Data model
+
+The data handled by the app is inherently hierarchical - the user owns a notebook, which contains multiple lists, which contain multiple task. For this reason, it was natural to model them as `Notebook`, `List` and `Task` classes, connected via composition.
+
+All of these classes can convert themselves to/from a dict for the purpose of JSON serialization. They are also convertible to `str` for rendering.
+
+### Task
+
+This class represents a single task entry. The task name is encapsulated together with its current done/prio state.
+
+### List
+
+A List has a name, and contains multiple Tasks. Coloring each task according to its state happens here, because only the list is aware of each task's index, and we want the index to be colored too.
+
+### Notebook
+
+Notebook is a collection of Lists. It can be serialized/deserialized as a whole.
+
+### TUI
+
+Represents the Terminal User Interface of the program. Handles rendering and user input. Holds the current state of the app - which screen is currently shown.
+
+### UserInput
+
+Handles sanitization and conversion of user input from the original string to split command keyword and parameters. 
+
+### Command, CommandList
+
+Command contains everything needed for a command to be defined, validated and executed. CommandList contains Commands, and can dispatch the user input to the right command. Each state has its own CommandList.
+
+### Config
+
+Manages user settings, allowing for validated read/write access.
+
+### Storage
+
+Handles Dropbox connection and upload/download of string data.
+
 ## Wireframes
 
 ![Wireframe mock-up of the app in list view](wireframes/lists.png)
