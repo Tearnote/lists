@@ -153,7 +153,7 @@ class TUI:
         ], has_index_arg=True, index_arg_required=True)
         cls.list_view_commands.add(list_remove_command)
         list_rename_command = Command("rename", cls._cmd_list_rename, [
-            f"Syntax: {Fore.GREEN}rename #{Style.RESET_ALL}",
+            f"Syntax: {Fore.GREEN}rename # ...{Style.RESET_ALL}",
             "",
             "Change the name of a list under the given index. The contents",
             "of the list stay unchanged.",
@@ -162,7 +162,7 @@ class TUI:
                                       text_arg_required=True)
         cls.list_view_commands.add(list_rename_command)
         task_add_command = Command("add", cls._cmd_task_add, [
-            f"Syntax: {Fore.GREEN}add #{Style.RESET_ALL}",
+            f"Syntax: {Fore.GREEN}add ...{Style.RESET_ALL}",
             "",
             "Add a task to the list. The task will be added at the end,",
             "in an un-done state.",
