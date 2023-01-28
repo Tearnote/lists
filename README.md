@@ -16,9 +16,9 @@ The Dropbox account link, as well as your settings, are not saved. As such, the 
 
 The documentation is split across three files:
 
-  - [README.md](README.md) (this file): Overview of the app. Read this to get an idea of the feature set, technologies used and project conventions.
-  - [DESIGN.md](doc/DESIGN.md): UX design notes crafted during early stages of development. The design process is described entirely, from the concept and market research to data modelling.
-  - [TESTING.md](doc/TESTING.md): Testing procedures. The app has been automatically validated and manually tested with procedures noted down in this file. WARNING - file contains ?MB of animated GIFs.
+-   [README.md](README.md) (this file): Overview of the app. Read this to get an idea of the feature set, technologies used and project conventions.
+-   [DESIGN.md](doc/DESIGN.md): UX design notes crafted during early stages of development. The design process is described entirely, from the concept and market research to data modelling.
+-   [TESTING.md](doc/TESTING.md): Testing procedures. The app has been automatically validated and manually tested with procedures noted down in this file. WARNING - file contains ?MB of animated GIFs.
 
 ## Highlights
 
@@ -52,10 +52,10 @@ Graceful and helpful handling of incorrect inputs.
 
 ## Technologies
 
-  - Python
-    - Idiomatic Python 3 source organized with classes and modules,
-    - Error handling via exceptions,
-    - PEP 8 compliant,
-    - Minimal dependencies,
-    - Serialization to/from JSON,
-    - Communication with web services via API libraries and OAuth.
+-   Python
+    -   Idiomatic Python 3 source organized with classes and modules,
+    -   Error handling via exceptions,
+    -   PEP 8 compliant,
+    -   Minimal dependencies,
+    -   Serialization to/from JSON,
+    -   Communication with web services via API libraries and OAuth.
