@@ -59,3 +59,12 @@ Graceful and helpful handling of incorrect inputs.
     -   Minimal dependencies,
     -   Serialization to/from JSON,
     -   Communication with web services via API libraries and OAuth.
+
+<details><summary>Directory structure</summary>
+
+-   `/` (root): `README.md`, Python sources, environment configuration
+-   `doc`: Additional Markdown files, PNG images used by Markdown files, any additional documentation files
+
+The project includes the Code Institute-provided web terminal, written on Node.js. All the HTML, CSS and Javascript files belong to it.
+
+</details>
