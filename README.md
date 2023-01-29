@@ -2,7 +2,7 @@
 
 ![A screenshot of Lists running in the Code Institute terminal](doc/screenshot.png)
 
-*Lists* is an interactive command-line program for creating and editing to-do lists. The lists can be synchronized with Dropbox for persistence.
+*Lists* is an interactive command-line program for creating and editing to-do lists, made for [Code Institute](https://codeinstitute.net)'s 3rd submission project. The lists can be synchronized with Dropbox for persistence.
 
 Live version is available [here](https://tearnote-lists.herokuapp.com).
 
