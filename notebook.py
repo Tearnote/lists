@@ -105,7 +105,6 @@ class Notebook(Sequence):
         result._lists = [List.from_data(lst) for lst in data["lists"]]
         return result
 
-
     def serialize(self):
         """Return the notebook contents as a JSON string
 
