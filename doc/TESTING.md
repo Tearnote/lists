@@ -26,6 +26,22 @@ State change commands enter the correct screens. "exit" stops the app with no wa
 
 Actual:
 
+#1
+
+![Screenshot of the initial screen](testing/layout-1.png)
+
+#2, #3
+
+![Screenshot of the task view](testing/layout-2.png)
+
+#4, #5, #6
+
+![Screenshot of the settings](testing/layout-3.png)
+
+#7
+
+![Screenshot of the exited app](testing/layout-4.png)
+
 The commands work as expected, and the layout is clear and correct.
 
 ### Command processing
@@ -45,6 +61,30 @@ All of the above checks return a clear error message in red above the prompt, an
 
 Actual:
 
+#1
+
+![Screenshot of too many parameters error](testing/commands-1.png)
+
+#2
+
+![Screenshot of missing parameters error](testing/commands-2.png)
+
+#3
+
+![Screenshot of invalid index error](testing/commands-3.png)
+
+#4
+
+![Screenshot of out of range index error](testing/commands-4.png)
+
+#5
+
+![Screenshot of unknown command error](testing/commands-5.png)
+
+#6
+
+![Screenshot of empty command text](testing/commands-6.png)
+
 The errors are returned as expected.
 
 ### List management
@@ -52,15 +92,26 @@ The errors are returned as expected.
 Procedure:
 
 1.  Add a new list with the "add" command,
-2.  Remove a list with the "remove" command,
-3.  Rename a list with the "rename" command,
-4.  Enter a list with the list index.
+2.  Rename a list with the "rename" command,
+3.  Remove a list with the "remove" command.
 
 Expected:
 
 The above commands have their obvious result.
 
 Actual:
+
+#1
+
+![Screenshot of adding a list](testing/lists-1.png)
+
+#2
+
+![Screenshot of renaming a list](testing/lists-2.png)
+
+#3
+
+![Screenshot of removing a list](testing/lists-3.png)
 
 The commands are working correctly.
 
@@ -68,20 +119,47 @@ The commands are working correctly.
 
 Procedure:
 
-1.  Enter a list with the list index,
-2.  Add a task with the "add" command,
+1.  In list view, add a task with the "add" command,
+2.  Rename a task with the "rename" command,
 3.  Remove a task with the "remove" command,
-4.  Rename a task with the "rename" command,
-5.  Mark a task as done with the "done" command,
-6.  Unmark a done task with the "done" command again,
-7.  Mark task as priority with the "prio" command,
-8.  Unmark a task as priority with the "prio" command again.
+4.  Mark a task as done with the "done" command,
+5.  Unmark a done task with the "done" command again,
+6.  Mark task as priority with the "prio" command,
+7.  Unmark a task as priority with the "prio" command again.
 
 Expected:
 
 The above commands have their obvious result.
 
 Actual:
+
+#1
+
+![Screenshot of adding a task](testing/tasks-1.png)
+
+#2
+
+![Screenshot of renaming a task](testing/tasks-2.png)
+
+#3
+
+![Screenshot of removing a task](testing/tasks-3.png)
+
+#4
+
+![Screenshot of marking a task as done](testing/tasks-4.png)
+
+#5
+
+![Screenshot of unmarking a task as done](testing/tasks-5.png)
+
+#6
+
+![Screenshot of marking a task as priority](testing/tasks-6.png)
+
+#7
+
+![Screenshot of unmarking a task as priority](testing/tasks-7.png)
 
 The commands are working correctly.
 
@@ -101,23 +179,50 @@ Help text appears correctly, doesn't need scrolling or break the layout of the r
 
 Actual:
 
+#1
+
+![Screenshot of general help text](testing/help-1.png)
+
+#2, #3
+
+![Screenshot of "add" command help text](testing/help-2.png)
+
+#4, #5
+
+![Screenshot of help for nonexistent command error](testing/help-3.png)
+
 Help text is shown and commands work as expected.
 
 ### Settings
 
 Procedure:
 
-1.  Enter settings with the "settings" command,
-2.  Type in "set 1 foo",
-3.  Type in "set 3 foo",
-4.  Set "show done tasks" to "hidden" with "set 1 hidden",
-5.  Leave settings and confirm that done tasks are now displayed as "===".
+1.  In the settings, type in "set 1 foo",
+2.  Type in "set 3 foo",
+3.  Set "show done tasks" to "hidden" with "set 1 hidden",
+4.  Leave settings and confirm that done tasks are now displayed as "===".
 
 Expected:
 
 Settings are shown and can be modified with the "set" command. The change has immediate effect. An error message is thrown if the index or the value are invalid.
 
 Actual:
+
+#1
+
+![Screenshot of settings error about invalid value](testing/settings-1.png)
+
+#2
+
+![Screenshot of settings error about invalid index](testing/settings-2.png)
+
+#3
+
+![Screenshot of changed "Show done tasks" setting](testing/settings-3.png)
+
+#4
+
+![Screenshot of the effect of the changed setting](testing/settings-4.png)
 
 Commands are working as expected.
 
@@ -137,5 +242,29 @@ Expected:
 Dropbox account link is functional, and displays an error in case of failure. Successful linking enables the "save" and "load" commands. The commands upload and download data from Dropbox, respectively.
 
 Actual:
+
+#1
+
+![Screenshot of the Dropbox wizard](testing/dropbox-1.png)
+
+#2
+
+![Screenshot of the Dropbox connection error](testing/dropbox-2.png)
+
+#3
+
+![Screenshot of successful Dropbox connection and added commands](testing/dropbox-3.png)
+
+#4
+
+![Screenshot of uploaded lists](testing/dropbox-4.png)
+
+#5
+
+![Screenshot of removing a list](testing/dropbox-5.png)
+
+#6
+
+![Screenshot of loading the lists](testing/dropbox-6.png)
 
 Dropbox functionality works correctly as expected.
