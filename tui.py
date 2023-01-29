@@ -60,6 +60,8 @@ class TUI:
     state = State.NONE  # Current view of the global state machine
     previous_states = []  # State "undo" support
     active_list = None  # Reference to currently viewed list in task view
+    # Whether the user was shown the error about unsaved changes
+    upload_warning_shown = False
 
     list_view_commands = CommandList()  # Commands available in LIST_VIEW state
     task_view_commands = CommandList()  # Commands available in TASK_VIEW state
@@ -351,7 +353,19 @@ class TUI:
         """Terminate the main loop
         """
         if Config.get("save_on_exit") == "yes":
-            cls._cmd_save(_)
+            if cls.storage is None:
+                if not cls.upload_warning_shown:
+                    cls.last_result = (
+                        f"{Fore.RED}"
+                        "You are not connected with Dropbox, so your lists "
+                        "will be lost.\nIf you're sure you want to exit, run "
+                        "the command again."
+                        f"{Style.RESET_ALL}"
+                    )
+                    cls.upload_warning_shown = True
+                    return
+            else:
+                cls._cmd_save(_)
         cls._change_state(cls.State.SHUTDOWN)
         put("Goodbye!\n")
 
