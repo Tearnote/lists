@@ -268,3 +268,14 @@ Actual:
 ![Screenshot of loading the lists](testing/dropbox-6.png)
 
 Dropbox functionality works correctly as expected.
+
+## User stories study
+
+In the design phase, we [established](DESIGN.md#user-stories) the expected user-base and what kinds of questions they might have when using the app. We will check if their questions are answered by the completed project.
+
+| Question                                | Answered? | How?                                                                                                                             |
+|-----------------------------------------|-----------|----------------------------------------------------------------------------------------------------------------------------------|
+| How do I add an item?                   | Yes       | Answered by the sidebar listing the "add" command in list view, and help functionality.                                          |
+| How do I mark an item as completed?     | Yes       | Same as above, with "done" command in task view.                                                                                 |
+| Can I create multiple lists?            | Yes       | Yes, implied by the existence of the "add" command in list view.                                                                 |
+| Are my lists being backed up somewhere? | Yes       | Answered by the exit command warning if Dropbox isn't connected, urging the user to make the connection and back up their lists. |
