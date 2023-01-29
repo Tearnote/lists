@@ -93,7 +93,8 @@ Procedure:
 
 1.  Add a new list with the "add" command,
 2.  Rename a list with the "rename" command,
-3.  Remove a list with the "remove" command.
+3.  Remove a list with the "remove" command,
+4.  Try to add too many lists to fit in the layout.
 
 Expected:
 
@@ -113,6 +114,10 @@ Actual:
 
 ![Screenshot of removing a list](testing/lists-3.png)
 
+#4
+
+![Screenshot of too many lists error](testing/lists-4.png)
+
 The commands are working correctly.
 
 ### Task management
@@ -125,7 +130,8 @@ Procedure:
 4.  Mark a task as done with the "done" command,
 5.  Unmark a done task with the "done" command again,
 6.  Mark task as priority with the "prio" command,
-7.  Unmark a task as priority with the "prio" command again.
+7.  Unmark a task as priority with the "prio" command again,
+8. Try to add too many tasks to fit in the layout.
 
 Expected:
 
@@ -160,6 +166,10 @@ Actual:
 #7
 
 ![Screenshot of unmarking a task as priority](testing/tasks-7.png)
+
+#8
+
+![Screenshot of too many tasks error](testing/tasks-8.png)
 
 The commands are working correctly.
 
