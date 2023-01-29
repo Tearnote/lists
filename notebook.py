@@ -9,6 +9,7 @@ class Notebook(Sequence):
     """
 
     DATA_VERSION = 1
+    MAX_LISTS = 19  # Max number of lists before layout overflow
 
     def __init__(self):
         """Constructor method
@@ -42,7 +43,10 @@ class Notebook(Sequence):
 
         :param new_list: The list instance to add
         :type new_list: :class:`List`
+        :raises RuntimeError: Too many lists
         """
+        if len(self._lists) >= self.MAX_LISTS:
+            raise RuntimeError("Reached the maximum allowed number of lists")
         self._lists.append(new_list)
 
     def remove(self, index):

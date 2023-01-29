@@ -14,6 +14,8 @@ class List(Sequence):
     :type name: str
     """
 
+    MAX_TASKS = 19  # Max number of tasks before layout overflow
+
     def __init__(self, name):
         """Constructor method
         """
@@ -48,7 +50,10 @@ class List(Sequence):
 
         :param new_task: The task instance to add
         :type new_task: :class:`Task`
+        :raises RuntimeError: Too many tasks
         """
+        if len(self._tasks) >= self.MAX_TASKS:
+            raise RuntimeError("Reached the maximum allowed number of tasks")
         self._tasks.append(new_task)
 
     def remove(self, index):
